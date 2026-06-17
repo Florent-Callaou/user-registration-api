@@ -7,17 +7,17 @@ import callaou.userregistration.model.entities.User;
 /**
  * Mapper for converting between User entities and DTOs.
  * 
- * @param <User>         The User entity type
- * @param <UserRequest>  The UserRequest DTO type
- * @param <UserResponse> The UserResponse DTO type
+ * @param <User>         the User entity type
+ * @param <UserRequest>  the UserRequest DTO type
+ * @param <UserResponse> the UserResponse DTO type
  */
 public class UserMapper implements BaseMapper<User, UserRequest, UserResponse> {
 
     /**
      * Maps a UserRequest DTO to a User entity.
      * 
-     * @param request The UserRequest DTO to be mapped
-     * @return The mapped User entity
+     * @param request the UserRequest DTO to be mapped
+     * @return the mapped User entity
      */
     @Override
     public User toEntity(UserRequest request) {
@@ -36,8 +36,8 @@ public class UserMapper implements BaseMapper<User, UserRequest, UserResponse> {
     /**
      * Maps a User entity to a UserResponse DTO.
      * 
-     * @param entity The User entity to be mapped
-     * @return The mapped UserResponse DTO
+     * @param entity the User entity to be mapped
+     * @return the mapped UserResponse DTO
      */
     @Override
     public UserResponse toResponse(User entity) {
