@@ -1,10 +1,16 @@
 package callaou.userregistration.model.entities;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -51,4 +57,10 @@ public class EligibilityRule {
      */
     @Column(nullable = false, length = 10)
     private String operator = "AND";
+
+    /**
+     * The set of eligibility criteria associated with the rule.
+     */
+    @OneToMany(mappedBy = "rule", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private Set<EligibilityCriteria> criterias = new HashSet<>();
 }
