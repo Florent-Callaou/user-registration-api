@@ -5,15 +5,15 @@ package callaou.userregistration.model.enumerations;
  * Defines operators used in eligibility criteria evaluation
  */
 public enum Operator {
-    EQ("Equal to"),
-    NEQ("Not equal to"),
-    GTE("Greater than or equal to"),
-    LTE("Less than or equal to"),
-    GT("Greater than"),
-    LT("Less than"),
-    BETWEEN("Between (inclusive)"),
-    IN("In list"),
-    NOT_IN("Not in list");
+    EQ("equal to"),
+    NEQ("not equal to"),
+    GTE("greater than or equal to"),
+    LTE("less than or equal to"),
+    GT("greater than"),
+    LT("less than"),
+    BETWEEN("between (inclusive)"),
+    IN("in list"),
+    NOT_IN("not in list");
 
     /**
      * Description of the operator.

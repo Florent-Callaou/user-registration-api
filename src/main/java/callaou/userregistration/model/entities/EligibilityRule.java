@@ -62,5 +62,5 @@ public class EligibilityRule {
      * The set of eligibility criteria associated with the eligibility rule.
      */
     @OneToMany(mappedBy = "eligibilityRule", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private Set<EligibilityCriteria> criterias = new HashSet<>();
+    private Set<EligibilityCriteria> criteria = new HashSet<>();
 }

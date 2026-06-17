@@ -75,7 +75,7 @@ public interface UserEligibilitySpecification {
      * @param value        the value for the criteria
      * @return the specification
      */
-    static UserEligibilitySpecification fromCriteriaType(CriteriaType criteriaType, Object value) {
+    static UserEligibilitySpecification fromCriteria(CriteriaType criteriaType, Object value) {
         return switch (criteriaType) {
             case COUNTRY -> countryRequirement((Country) value);
             case AGE_MIN -> minimumAgeRequirement((Integer) value);
