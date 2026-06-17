@@ -9,10 +9,11 @@ import callaou.userregistration.model.enumerations.Gender;
  * Data Transfer Object for user response.
  */
 public record UserResponse(
-        Long id,
-        String username,
-        LocalDate birthdate,
-        Country countryOfResidence,
-        String phoneNumber,
-        Gender gender) {
+                Long id,
+                String username,
+                LocalDate birthdate,
+                Country countryOfResidence,
+                String phoneNumber,
+                Gender gender) {
+
 }
