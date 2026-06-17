@@ -1,3 +1,7 @@
 spring:
   application:
     name: userregistration
+    
+  liquibase:
+    enabled: true
+    change-log: classpath:liquibase/changelog/liquibase-changelog.yaml
