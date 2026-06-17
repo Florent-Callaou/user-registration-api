@@ -1,0 +1,11 @@
+username;birthdate;country_of_residence;phone_number;gender
+alice.legrand;1990-05-12;FR;+33123456789;FEMALE
+benjamin.dupont;1985-11-03;FR;+33698765432;MALE
+camille.martin;1998-07-21;FR;+33744556677;NON_BINARY
+david.moreau;1992-02-10;FR;+33199887766;MALE
+emilie.bernard;1988-09-30;FR;+33611223344;FEMALE
+francois.leroy;1995-12-05;FR;+33755443322;PREFER_TO_SELF_DESCRIBE
+gaelle.richard;1993-04-18;FR;+33177665544;FEMALE
+henri.bastien;1980-01-27;FR;+33644332211;MALE
+isabelle.fouquet;1996-08-14;FR;+33722113344;PREFER_NOT_TO_SAY
+jean.roux;1982-06-02;FR;+33166778899;MALE
