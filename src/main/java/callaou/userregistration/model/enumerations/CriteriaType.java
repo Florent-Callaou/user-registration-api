@@ -10,12 +10,25 @@ public enum CriteriaType {
     AGE_MAX("Maximum age criteria - validates maximum age limit"),
     CUSTOM("Custom criteria - extensible for future requirements");
 
+    /**
+     * The description of the criteria type.
+     */
     private final String description;
 
+    /**
+     * Constructor for the CriteriaType enum.
+     *
+     * @param description the description of the criteria type
+     */
     CriteriaType(String description) {
         this.description = description;
     }
 
+    /**
+     * Gets the description of the criteria type.
+     *
+     * @return the description of the criteria type
+     */
     public String getDescription() {
         return description;
     }

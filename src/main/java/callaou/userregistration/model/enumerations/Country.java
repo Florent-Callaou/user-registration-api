@@ -21,12 +21,25 @@ public enum Country {
     AU("Australia"),
     JP("Japan");
 
+    /**
+     * The label for the country.
+     */
     private final String label;
 
+    /**
+     * Constructor for the Country enum.
+     *
+     * @param label the label for the country
+     */
     Country(String label) {
         this.label = label;
     }
 
+    /**
+     * Gets the label for the country.
+     *
+     * @return the label for the country
+     */
     public String getLabel() {
         return label;
     }

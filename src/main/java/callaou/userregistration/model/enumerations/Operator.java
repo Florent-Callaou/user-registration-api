@@ -15,12 +15,25 @@ public enum Operator {
     IN("In list"),
     NOT_IN("Not in list");
 
+    /**
+     * Description of the operator.
+     */
     private final String description;
 
+    /**
+     * Constructor for the Operator enum.
+     *
+     * @param description the description of the operator
+     */
     Operator(String description) {
         this.description = description;
     }
 
+    /**
+     * Gets the description of the operator.
+     *
+     * @return the description of the operator
+     */
     public String getDescription() {
         return description;
     }
