@@ -8,7 +8,8 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
     BAD_REQUEST("400", HttpStatus.BAD_REQUEST),
     ALREADY_EXISTS("409", HttpStatus.CONFLICT),
-    USER_NOT_ELIGIBLE("422", HttpStatus.valueOf(422));
+    USER_NOT_ELIGIBLE("422", HttpStatus.valueOf(422)),
+    INTERNAL_SERVER_ERROR("500", HttpStatus.INTERNAL_SERVER_ERROR);
 
     /**
      * The error code as a string.

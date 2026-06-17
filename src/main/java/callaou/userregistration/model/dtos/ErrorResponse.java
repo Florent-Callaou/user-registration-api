@@ -21,8 +21,8 @@ public record ErrorResponse(
      * @param message the error message
      * @return the error response
      */
-    public static ErrorResponse of(String code, String message) {
-        return new ErrorResponse(code, message, null, Instant.now());
+    public static ErrorResponse of(ErrorCode code, String message) {
+        return new ErrorResponse(code.getCode(), message, null, Instant.now());
     }
 
     /**
