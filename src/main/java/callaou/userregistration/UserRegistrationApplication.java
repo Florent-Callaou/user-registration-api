@@ -9,13 +9,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class UserRegistrationApplication {
 
-	/**
-	 * The main method to run the User Registration application.
-	 *
-	 * @param args the command line arguments
-	 */
-	public static void main(String[] args) {
-		SpringApplication.run(UserRegistrationApplication.class, args);
-	}
+    /**
+     * The main method to run the User Registration application.
+     *
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        SpringApplication.run(UserRegistrationApplication.class, args);
+    }
 
 }
