@@ -59,8 +59,8 @@ public class EligibilityRule {
     private String operator = "AND";
 
     /**
-     * The set of eligibility criteria associated with the rule.
+     * The set of eligibility criteria associated with the eligibility rule.
      */
-    @OneToMany(mappedBy = "rule", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "eligibilityRule", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<EligibilityCriteria> criterias = new HashSet<>();
 }
