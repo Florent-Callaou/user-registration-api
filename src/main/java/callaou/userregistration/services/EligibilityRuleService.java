@@ -3,7 +3,6 @@ package callaou.userregistration.services;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.function.BinaryOperator;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -12,7 +11,6 @@ import callaou.userregistration.exceptions.UserNotEligibleException;
 import callaou.userregistration.model.entities.EligibilityCriteria;
 import callaou.userregistration.model.entities.EligibilityRule;
 import callaou.userregistration.model.entities.User;
-import callaou.userregistration.model.enumerations.Operator;
 import callaou.userregistration.repositories.EligibilityRuleRepository;
 import callaou.userregistration.specifications.UserEligibilitySpecification;
 
