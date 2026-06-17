@@ -17,6 +17,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Entity representing a user in the system.
+ */
 @Entity
 @Table(name = "users", uniqueConstraints = {
         @UniqueConstraint(name = "uk_user_composite", columnNames = { "username", "birthdate", "country" })
@@ -25,23 +28,41 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class User {
+    /**
+     * The unique identifier for the user.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     * The username for the user.
+     */
     @Column(nullable = false, length = 50)
     private String username;
 
+    /**
+     * The birthdate for the user.
+     */
     @Column(nullable = false)
     private LocalDate birthdate;
 
+    /**
+     * The country of residence for the user.
+     */
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 2)
     private Country countryOfResidence;
 
+    /**
+     * The phone number for the user.
+     */
     @Column(length = 20)
     private String phoneNumber;
 
+    /**
+     * The gender for the user.
+     */
     @Enumerated(EnumType.STRING)
     @Column(length = 30)
     private Gender gender;
