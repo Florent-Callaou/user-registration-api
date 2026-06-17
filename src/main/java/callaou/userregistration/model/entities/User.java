@@ -21,7 +21,7 @@ import lombok.Setter;
  * Entity representing a user in the system.
  */
 @Entity
-@Table(name = "user", uniqueConstraints = {
+@Table(name = "users", uniqueConstraints = {
         @UniqueConstraint(name = "uk_user_composite", columnNames = { "username", "birthdate", "country" })
 })
 @Getter
