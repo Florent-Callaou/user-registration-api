@@ -1,0 +1,69 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-add-rule-adults-202606171118
+      author: florent.callaou
+      comments: "add initial eligibility rule for french adults — default rule (FR + AGE_MIN 18)"
+      changes:
+        - insert:
+            tableName: eligibility_rules
+            columns:
+              - column:
+                  name: name
+                  value: "French adults"
+              - column:
+                  name: description
+                  value: "User registration eligibility rule for French adults (country = FR and age >= 18)"
+              - column:
+                  name: enabled
+                  valueBoolean: true
+              - column:
+                  name: operator
+                  value: "AND"
+        - insert:
+            tableName: eligibility_criteria
+            columns:
+              - column:
+                  name: criteria_type
+                  value: "COUNTRY"
+              - column:
+                  name: operator
+                  value: "EQUALS"
+              - column:
+                  name: value
+                  value: "FR"
+              - column:
+                  name: max_value
+                  value: null
+              - column:
+                  name: description
+                  value: "Country is France"
+              - column:
+                  name: priority
+                  valueNumeric: 0
+              - column:
+                  name: rule_id
+                  valueNumeric: 1
+        - insert:
+            tableName: eligibility_criteria
+            columns:
+              - column:
+                  name: criteria_type
+                  value: "AGE"
+              - column:
+                  name: operator
+                  value: "GREATER_OR_EQUAL"
+              - column:
+                  name: value
+                  value: "18"
+              - column:
+                  name: max_value
+                  value: null
+              - column:
+                  name: description
+                  value: "Minimum age 18"
+              - column:
+                  name: priority
+                  valueNumeric: 1
+              - column:
+                  name: rule_id
+                  valueNumeric: 1
