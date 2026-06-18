@@ -35,6 +35,9 @@ import callaou.userregistration.model.enumerations.Country;
 import callaou.userregistration.model.enumerations.Gender;
 import callaou.userregistration.services.UserService;
 
+/**
+ * Unit tests for {@link UserController}
+ */
 @WebMvcTest(controllers = UserController.class)
 @WithMockUser
 class UserControllerTest {
