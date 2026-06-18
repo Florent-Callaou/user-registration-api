@@ -9,7 +9,7 @@ public class AlreadyExistsException extends BusinessException {
     /**
      * The message format for the exception.
      */
-    private static final String MSG_OBJECT_ALREADY_EXISTS = "Object %s with %s '%s' already exists";
+    private static final String MSG_OBJECT_ALREADY_EXISTS = "Object %s with %s: '%s' already exists";
 
     /**
      * Constructs an instance of the exception with the specified entity name, field
