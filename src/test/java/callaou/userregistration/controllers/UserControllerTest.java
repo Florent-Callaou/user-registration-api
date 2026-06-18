@@ -379,6 +379,30 @@ class UserControllerTest {
 
             verify(userService, never()).registerUser(any());
         }
+
+        @Test
+        @DisplayName("should return 400 when countryOfResidence is invalid")
+        void shouldReturn400WhenCountryInvalid() throws Exception {
+            String invalidPayload = """
+                    {
+                        "username": "richard.jour",
+                        "birthdate": "1994-02-25",
+                        "countryOfResidence": "INVALID",
+                        "phoneNumber": "+33702454575",
+                        "gender": "MALE"
+                    }
+                                        """;
+
+            mockMvc.perform(post("/api/users")
+                    .with(csrf())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(invalidPayload))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.message").value(
+                            "Invalid value 'INVALID' for field 'Country'. Allowed values: [FR, US, DE, IT, ES, GB, SE, NO, NL, BE, CH, CA, MX, AU, JP]"));
+
+            verify(userService, never()).registerUser(any());
+        }
     }
 
     @Nested
@@ -464,6 +488,91 @@ class UserControllerTest {
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(validRequest)))
                     .andExpect(status().isCreated());
+        }
+    }
+
+    @Nested
+    @DisplayName("POST /api/users — gender validation")
+    class GenderValidation {
+        @Test
+        @DisplayName("should return 400 when Gender is invalid")
+        void shouldReturn400WhenGenderInvalid() throws Exception {
+            String invalidPayload = """
+                    {
+                        "username": "richard.jour",
+                        "birthdate": "1994-02-25",
+                        "countryOfResidence": "FR",
+                        "phoneNumber": "+33702454575",
+                        "gender": "INVALID"
+                    }
+                                        """;
+
+            mockMvc.perform(post("/api/users")
+                    .with(csrf())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(invalidPayload))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.message").value(
+                            "Invalid value 'INVALID' for field 'Gender'. Allowed values: [MALE, FEMALE, NON_BINARY, PREFER_NOT_TO_SAY, PREFER_TO_SELF_DESCRIBE]"));
+
+            verify(userService, never()).registerUser(any());
+        }
+    }
+
+    @Nested
+    @DisplayName("POST /api/users — json validation")
+    class JsonValidation {
+        @Test
+        @DisplayName("should return 400 when json is malformed")
+        void shouldReturn400WhenJsonMalformed() throws Exception {
+            String invalidPayload = """
+                    {
+                        "username": "richard.jour",
+                        "birthdate": "1994-02-25",
+                        "countryOfResidence": "FR",
+                        "phoneNumber": "+33702454575",
+                        "gender": "MALE
+                    }
+                                        """;
+
+            mockMvc.perform(post("/api/users")
+                    .with(csrf())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(invalidPayload))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.message").value(
+                            "Malformed JSON input"));
+
+            verify(userService, never()).registerUser(any());
+        }
+    }
+
+    @Nested
+    @DisplayName("POST /api/users — unexcpected exception")
+    class UnexcpectedException {
+        @Test
+        @DisplayName("should return 500 when unexpected exception occurs")
+        void shouldReturn500OnUnexpectedException() throws Exception {
+            when(userService.registerUser(any())).thenThrow(new IllegalStateException("Simulated unexpected failure"));
+
+            String validPayload = """
+                    {
+                        "username": "richard.jour",
+                        "birthdate": "1994-02-25",
+                        "countryOfResidence": "FR",
+                        "phoneNumber": "+33702454575",
+                        "gender": "MALE"
+                    }
+                    """;
+
+            mockMvc.perform(post("/api/users")
+                    .with(csrf())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(validPayload))
+                    .andExpect(status().isInternalServerError())
+                    .andExpect(jsonPath("$.code").value("500"))
+                    .andExpect(
+                            jsonPath("$.message").value("An unexpected error occurred: Simulated unexpected failure"));
         }
     }
 
