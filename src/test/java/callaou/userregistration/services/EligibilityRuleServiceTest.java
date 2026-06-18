@@ -55,7 +55,7 @@ class EligibilityRuleServiceTest {
         /**
          * Object generator
          */
-        EasyRandom generator = new EasyRandom();
+        private final EasyRandom generator = new EasyRandom();
 
         /**
          * Build user given country and birthdate
