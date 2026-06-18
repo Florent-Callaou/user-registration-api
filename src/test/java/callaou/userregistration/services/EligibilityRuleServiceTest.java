@@ -219,7 +219,7 @@ class EligibilityRuleServiceTest {
 
                         assertThatThrownBy(() -> eligibilityRuleService.verifyUserEligibility(ineligibleUser))
                                         .isInstanceOf(UserNotEligibleException.class)
-                                        .hasMessage("User is not eligible: Country must be not equal to DE")
+                                        .hasMessage("User is not eligible: Country must be different than DE")
                                         .extracting("errorCode.httpStatus")
                                         .isEqualTo(HttpStatus.valueOf(422));
                 }
@@ -286,7 +286,7 @@ class EligibilityRuleServiceTest {
 
                         assertThatThrownBy(() -> eligibilityRuleService.verifyUserEligibility(ineligibleUser))
                                         .isInstanceOf(UserNotEligibleException.class)
-                                        .hasMessage("User is not eligible: Country must be not in list FR,DE")
+                                        .hasMessage("User is not eligible: Country must be different than FR,DE")
                                         .extracting("errorCode.httpStatus")
                                         .isEqualTo(HttpStatus.valueOf(422));
                 }
@@ -626,7 +626,7 @@ class EligibilityRuleServiceTest {
                         assertThatThrownBy(() -> eligibilityRuleService.verifyUserEligibility(ineligibleUser))
                                         .isInstanceOf(UserNotEligibleException.class)
                                         .hasMessage(
-                                                        "User is not eligible: Age must be less than or equal to 80, Country must be not equal to DE")
+                                                        "User is not eligible: Age must be less than or equal to 80, Country must be different than DE")
                                         .extracting("errorCode.httpStatus")
                                         .isEqualTo(HttpStatus.valueOf(422));
                 }
@@ -647,7 +647,7 @@ class EligibilityRuleServiceTest {
                         assertThatThrownBy(() -> eligibilityRuleService.verifyUserEligibility(ineligibleUser))
                                         .isInstanceOf(UserNotEligibleException.class)
                                         .hasMessage(
-                                                        "User is not eligible: Country must be equal to FR, Age must be greater than or equal to 18, Country must be not equal to DE")
+                                                        "User is not eligible: Country must be equal to FR, Age must be greater than or equal to 18, Country must be different than DE")
                                         .extracting("errorCode.httpStatus")
                                         .isEqualTo(HttpStatus.valueOf(422));
                 }
@@ -704,7 +704,7 @@ class EligibilityRuleServiceTest {
                         assertThatThrownBy(() -> eligibilityRuleService.verifyUserEligibility(ineligibleUser))
                                         .isInstanceOf(UserNotEligibleException.class)
                                         .hasMessage(
-                                                        "User is not eligible: Country must be not in list US,BE, Age must be less than or equal to 100")
+                                                        "User is not eligible: Country must be different than US,BE, Age must be less than or equal to 100")
                                         .extracting("errorCode.httpStatus")
                                         .isEqualTo(HttpStatus.valueOf(422));
                 }

@@ -6,14 +6,14 @@ package callaou.userregistration.model.enumerations;
  */
 public enum Operator {
     EQ("equal to"),
-    NEQ("not equal to"),
+    NEQ("different than"),
     GTE("greater than or equal to"),
     LTE("less than or equal to"),
     GT("greater than"),
     LT("less than"),
     BETWEEN("between (inclusive)"),
     IN("in list"),
-    NOT_IN("not in list");
+    NOT_IN("different than");
 
     /**
      * Description of the operator.
