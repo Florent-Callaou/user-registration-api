@@ -6,7 +6,7 @@ package callaou.userregistration.model.enumerations;
  */
 public enum CriteriaType {
     COUNTRY("Country criteria - validates country of residence", "Country"),
-    AGE_MIN("Minimum age criteria - validates minimum age requirement", "Age"),
+    AGE("Age criteria - validates age requirement", "Age"),
     CUSTOM("Custom criteria - extensible for future requirements", "Custom");
 
     /**

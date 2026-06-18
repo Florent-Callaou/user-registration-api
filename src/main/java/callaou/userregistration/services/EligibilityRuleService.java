@@ -70,9 +70,10 @@ public class EligibilityRuleService {
 
         List<EligibilityCriteria> failedCriteria = new ArrayList<>();
 
-        for (EligibilityCriteria eligibilityCriterion : failedCriteria) {
+        for (EligibilityCriteria eligibilityCriterion : criteria) {
             UserEligibilitySpecification userEligibilitySpecification = UserEligibilitySpecification.fromCriteria(
                     eligibilityCriterion.getCriteriaType(),
+                    eligibilityCriterion.getOperator(),
                     eligibilityCriterion.getValue());
 
             if (!userEligibilitySpecification.isSatisfiedBy(user)) {

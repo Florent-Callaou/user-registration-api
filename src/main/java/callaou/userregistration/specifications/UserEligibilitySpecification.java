@@ -3,8 +3,9 @@ package callaou.userregistration.specifications;
 import java.time.LocalDate;
 
 import callaou.userregistration.model.entities.User;
-import callaou.userregistration.model.enumerations.Country;
 import callaou.userregistration.model.enumerations.CriteriaType;
+import callaou.userregistration.model.enumerations.Operator;
+import callaou.userregistration.specifications.utils.CriteriaValueParser;
 
 public interface UserEligibilitySpecification {
 
@@ -17,70 +18,82 @@ public interface UserEligibilitySpecification {
     boolean isSatisfiedBy(User user);
 
     /**
-     * Creates a specification for checking the country requirement.
-     *
-     * @param country the required country
-     * @return the specification
-     */
-    static UserEligibilitySpecification countryRequirement(Country country) {
-        return user -> country.equals(user.getCountryOfResidence());
-    }
-
-    /**
-     * Creates a specification for checking the minimum age requirement.
-     *
-     * @param minimumAge the minimum age
-     * @return the specification
-     */
-    static UserEligibilitySpecification minimumAgeRequirement(int minimumAge) {
-        return user -> {
-            LocalDate birthdate = user.getBirthdate();
-            LocalDate minBirthdate = LocalDate.now().minusYears(minimumAge);
-            return !birthdate.isAfter(minBirthdate);
-        };
-    }
-
-    /**
-     * Creates a specification for checking the AND condition of two eligibility
-     * specifications.
-     *
-     * @param userEligibilitySpecification1 the first specification
-     * @param userEligibilitySpecification2 the second specification
-     * @return the specification
-     */
-    static UserEligibilitySpecification and(UserEligibilitySpecification userEligibilitySpecification1,
-            UserEligibilitySpecification userEligibilitySpecification2) {
-        return user -> userEligibilitySpecification1.isSatisfiedBy(user)
-                && userEligibilitySpecification2.isSatisfiedBy(user);
-    }
-
-    /**
-     * Creates a specification for checking the OR condition of two eligibility
-     * specifications.
-     *
-     * @param userEligibilitySpecification1 the first specification
-     * @param userEligibilitySpecification2 the second specification
-     * @return the specification
-     */
-    static UserEligibilitySpecification or(UserEligibilitySpecification userEligibilitySpecification1,
-            UserEligibilitySpecification userEligibilitySpecification2) {
-        return user -> userEligibilitySpecification1.isSatisfiedBy(user)
-                || userEligibilitySpecification2.isSatisfiedBy(user);
-    }
-
-    /**
      * Creates a specification based on the criteria type and value.
      *
      * @param criteriaType the type of criteria
      * @param value        the value for the criteria
      * @return the specification
      */
-    static UserEligibilitySpecification fromCriteria(CriteriaType criteriaType, Object value) {
+    static UserEligibilitySpecification fromCriteria(CriteriaType criteriaType,
+            Operator operator,
+            String value) {
         return switch (criteriaType) {
-            case COUNTRY -> countryRequirement((Country) value);
-            case AGE_MIN -> minimumAgeRequirement((Integer) value);
+            case COUNTRY -> countrySpecification(operator, value);
+            case AGE -> ageSpecification(operator, value);
             case CUSTOM -> user -> true;
-            default -> throw new IllegalArgumentException("Unsupported criteria type: " + criteriaType);
+        };
+    }
+
+    /**
+     * Evaluate country specification
+     * 
+     * @param operator the operator for the evaluation
+     * @param value    the country value
+     * @return the UserEligibilitySpecification
+     */
+    private static UserEligibilitySpecification countrySpecification(Operator operator, String value) {
+        return switch (operator) {
+            case EQ -> user -> CriteriaValueParser.parseCountry(value)
+                    .equals(user.getCountryOfResidence());
+            case NEQ -> user -> !CriteriaValueParser.parseCountry(value)
+                    .equals(user.getCountryOfResidence());
+            case IN -> user -> CriteriaValueParser.parseCountryList(value)
+                    .contains(user.getCountryOfResidence());
+            case NOT_IN -> user -> !CriteriaValueParser.parseCountryList(value)
+                    .contains(user.getCountryOfResidence());
+            default -> throw new IllegalArgumentException(
+                    "Operator " + operator + " is not supported for COUNTRY criteria");
+        };
+    }
+
+    /**
+     * Evaluate age specification
+     * 
+     * @param operator the operator for the evaluation
+     * @param value    the age value
+     * @return the UserEligibilitySpecification
+     */
+    private static UserEligibilitySpecification ageSpecification(Operator operator, String value) {
+        return switch (operator) {
+            case GTE -> user -> {
+                int minAge = CriteriaValueParser.parseAge(value);
+                LocalDate minBirthdate = LocalDate.now().minusYears(minAge);
+                return !user.getBirthdate().isAfter(minBirthdate);
+            };
+            case LTE -> user -> {
+                int maxAge = CriteriaValueParser.parseAge(value);
+                LocalDate maxBirthdate = LocalDate.now().minusYears(maxAge);
+                return !user.getBirthdate().isBefore(maxBirthdate);
+            };
+            case GT -> user -> {
+                int minAge = CriteriaValueParser.parseAge(value);
+                LocalDate minBirthdate = LocalDate.now().minusYears(minAge);
+                return user.getBirthdate().isBefore(minBirthdate);
+            };
+            case LT -> user -> {
+                int maxAge = CriteriaValueParser.parseAge(value);
+                LocalDate maxBirthdate = LocalDate.now().minusYears(maxAge);
+                return user.getBirthdate().isAfter(maxBirthdate);
+            };
+            case BETWEEN -> user -> {
+                int[] range = CriteriaValueParser.parseAgeRange(value);
+                LocalDate birthdate = user.getBirthdate();
+                LocalDate today = LocalDate.now();
+                return !birthdate.isAfter(today.minusYears(range[0]))
+                        && !birthdate.isBefore(today.minusYears(range[1]));
+            };
+            default -> throw new IllegalArgumentException(
+                    "Operator " + operator + " is not supported for AGE criteria");
         };
     }
 }
