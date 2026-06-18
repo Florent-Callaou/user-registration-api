@@ -58,7 +58,7 @@ public class UserService {
         LocalDate birthdate = userRequest.birthdate();
         Country countryOfResidence = userRequest.countryOfResidence();
 
-        if (userRepository.existsByUsernameAndBirthdateAndCountry(username, birthdate, countryOfResidence)) {
+        if (userRepository.existsByUsernameAndBirthdateAndCountryOfResidence(username, birthdate, countryOfResidence)) {
             String messageValues = String.join(", ", username, birthdate.toString(), countryOfResidence.getLabel());
             throw new AlreadyExistsException(User.class, "username, birthdate, country", messageValues);
         }

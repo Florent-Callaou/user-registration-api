@@ -1,5 +1,7 @@
 package callaou.userregistration.mappers;
 
+import org.springframework.stereotype.Component;
+
 import callaou.userregistration.model.dtos.UserRequest;
 import callaou.userregistration.model.dtos.UserResponse;
 import callaou.userregistration.model.entities.User;
@@ -11,6 +13,7 @@ import callaou.userregistration.model.entities.User;
  * @param <UserRequest>  the UserRequest DTO type
  * @param <UserResponse> the UserResponse DTO type
  */
+@Component
 public class UserMapper implements BaseMapper<User, UserRequest, UserResponse> {
 
     /**

@@ -72,9 +72,9 @@ public class EligibilityRuleService {
 
         for (EligibilityCriteria eligibilityCriterion : criteria) {
             UserEligibilitySpecification userEligibilitySpecification = UserEligibilitySpecification.fromCriteria(
-                    eligibilityCriterion.getCriteriaType(),
+                    eligibilityCriterion.getCriterionType(),
                     eligibilityCriterion.getOperator(),
-                    eligibilityCriterion.getValue());
+                    eligibilityCriterion.getCriterionValue());
 
             if (!userEligibilitySpecification.isSatisfiedBy(user)) {
                 failedCriteria.add(eligibilityCriterion);
@@ -98,9 +98,9 @@ public class EligibilityRuleService {
         return failedCriteria
                 .stream()
                 .map(criterion -> (String.format("%s must be %s %s",
-                        criterion.getCriteriaType().getLabel(),
+                        criterion.getCriterionType().getLabel(),
                         criterion.getOperator().getDescription(),
-                        criterion.getValue())))
+                        criterion.getCriterionValue())))
                 .collect(Collectors.joining(", "));
     }
 }

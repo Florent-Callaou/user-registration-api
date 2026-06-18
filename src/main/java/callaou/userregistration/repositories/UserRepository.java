@@ -14,5 +14,5 @@ import callaou.userregistration.model.enumerations.Country;
  */
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    boolean existsByUsernameAndBirthdateAndCountry(String username, LocalDate birthdate, Country country);
+    boolean existsByUsernameAndBirthdateAndCountryOfResidence(String username, LocalDate birthdate, Country country);
 }

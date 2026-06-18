@@ -1,6 +1,6 @@
 package callaou.userregistration.model.entities;
 
-import callaou.userregistration.model.enumerations.CriteriaType;
+import callaou.userregistration.model.enumerations.CriterionType;
 import callaou.userregistration.model.enumerations.Operator;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -40,7 +40,7 @@ public class EligibilityCriteria {
      */
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)
-    private CriteriaType criteriaType;
+    private CriterionType criterionType;
 
     /**
      * The operator used for evaluating the criteria.
@@ -52,8 +52,8 @@ public class EligibilityCriteria {
     /**
      * The value associated with the criteria.
      */
-    @Column(nullable = false, length = 255)
-    private String value;
+    @Column(name = "criterion_value", nullable = false, length = 255)
+    private String criterionValue;
 
     /**
      * The maximum value for the criteria (used for BETWEEN operator).

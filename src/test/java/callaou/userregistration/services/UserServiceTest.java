@@ -78,7 +78,8 @@ class UserServiceTest {
                     "+33014852636",
                     Gender.MALE);
 
-            when(userRepository.existsByUsernameAndBirthdateAndCountry(any(), any(), any())).thenReturn(false);
+            when(userRepository.existsByUsernameAndBirthdateAndCountryOfResidence(any(), any(), any()))
+                    .thenReturn(false);
 
             doNothing().when(eligibilityRuleService).verifyUserEligibility(any(User.class));
 
@@ -100,8 +101,8 @@ class UserServiceTest {
             assertThat(response.phoneNumber()).isEqualTo(validRequest.phoneNumber());
             assertThat(response.gender()).isEqualTo(validRequest.gender());
 
-            verify(userRepository).existsByUsernameAndBirthdateAndCountry(any(), any(), any());
-            verify(userRepository).existsByUsernameAndBirthdateAndCountry(
+            verify(userRepository).existsByUsernameAndBirthdateAndCountryOfResidence(any(), any(), any());
+            verify(userRepository).existsByUsernameAndBirthdateAndCountryOfResidence(
                     "jean.jacques",
                     LocalDate.now().minusYears(25),
                     Country.FR);
@@ -121,7 +122,7 @@ class UserServiceTest {
                     "0778529684",
                     Gender.FEMALE);
 
-            when(userRepository.existsByUsernameAndBirthdateAndCountry(any(), any(),
+            when(userRepository.existsByUsernameAndBirthdateAndCountryOfResidence(any(), any(),
                     any())).thenReturn(false);
 
             doNothing().when(eligibilityRuleService).verifyUserEligibility(any(User.class));
@@ -141,8 +142,8 @@ class UserServiceTest {
             assertThat(captured.getPhoneNumber()).isEqualTo(validRequest.phoneNumber());
             assertThat(captured.getGender()).isEqualTo(validRequest.gender());
 
-            verify(userRepository).existsByUsernameAndBirthdateAndCountry(any(), any(), any());
-            verify(userRepository).existsByUsernameAndBirthdateAndCountry(
+            verify(userRepository).existsByUsernameAndBirthdateAndCountryOfResidence(any(), any(), any());
+            verify(userRepository).existsByUsernameAndBirthdateAndCountryOfResidence(
                     "martha.tack",
                     LocalDate.now().minusYears(27),
                     Country.DE);
@@ -162,7 +163,8 @@ class UserServiceTest {
                     "+54856995214",
                     Gender.NON_BINARY);
 
-            when(userRepository.existsByUsernameAndBirthdateAndCountry(any(), any(), any())).thenReturn(false);
+            when(userRepository.existsByUsernameAndBirthdateAndCountryOfResidence(any(), any(), any()))
+                    .thenReturn(false);
 
             doNothing().when(eligibilityRuleService).verifyUserEligibility(any(User.class));
 
@@ -182,8 +184,8 @@ class UserServiceTest {
             assertThat(captured.getPhoneNumber()).isEqualTo(validRequest.phoneNumber());
             assertThat(captured.getGender()).isEqualTo(validRequest.gender());
 
-            verify(userRepository).existsByUsernameAndBirthdateAndCountry(any(), any(), any());
-            verify(userRepository).existsByUsernameAndBirthdateAndCountry(
+            verify(userRepository).existsByUsernameAndBirthdateAndCountryOfResidence(any(), any(), any());
+            verify(userRepository).existsByUsernameAndBirthdateAndCountryOfResidence(
                     "julien.bras",
                     LocalDate.now().minusYears(65),
                     Country.US);
@@ -207,7 +209,8 @@ class UserServiceTest {
                     "+54858965214",
                     Gender.PREFER_TO_SELF_DESCRIBE);
 
-            when(userRepository.existsByUsernameAndBirthdateAndCountry(any(), any(), any())).thenReturn(true);
+            when(userRepository.existsByUsernameAndBirthdateAndCountryOfResidence(any(), any(), any()))
+                    .thenReturn(true);
 
             assertThatThrownBy(() -> userService.registerUser(existingUser))
                     .isInstanceOf(AlreadyExistsException.class)
@@ -216,8 +219,8 @@ class UserServiceTest {
                     .extracting("errorCode.httpStatus")
                     .isEqualTo(HttpStatus.CONFLICT);
 
-            verify(userRepository).existsByUsernameAndBirthdateAndCountry(any(), any(), any());
-            verify(userRepository).existsByUsernameAndBirthdateAndCountry(
+            verify(userRepository).existsByUsernameAndBirthdateAndCountryOfResidence(any(), any(), any());
+            verify(userRepository).existsByUsernameAndBirthdateAndCountryOfResidence(
                     "pierre.raoul",
                     LocalDate.of(2000, 02, 05),
                     Country.FR);
@@ -240,7 +243,7 @@ class UserServiceTest {
                     "0698745263",
                     Gender.MALE);
 
-            when(userRepository.existsByUsernameAndBirthdateAndCountry(any(), any(), any()))
+            when(userRepository.existsByUsernameAndBirthdateAndCountryOfResidence(any(), any(), any()))
                     .thenReturn(false);
 
             doThrow(new UserNotEligibleException("Age must be greater than or equal to 18"))
@@ -252,8 +255,8 @@ class UserServiceTest {
                     .extracting("errorCode.httpStatus")
                     .isEqualTo(HttpStatus.valueOf(422));
 
-            verify(userRepository).existsByUsernameAndBirthdateAndCountry(any(), any(), any());
-            verify(userRepository).existsByUsernameAndBirthdateAndCountry(
+            verify(userRepository).existsByUsernameAndBirthdateAndCountryOfResidence(any(), any(), any());
+            verify(userRepository).existsByUsernameAndBirthdateAndCountryOfResidence(
                     "michel.bertrand",
                     LocalDate.now().minusYears(52),
                     Country.FR);
