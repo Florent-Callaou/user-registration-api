@@ -20,7 +20,7 @@ import lombok.Setter;
 /**
  * Eligibility Criteria Entity
  * Individual criteria that make up an eligibility rule
- * Example: COUNTRY EQ FR, AGE_MIN GTE 18
+ * Example: COUNTRY EQ FR, AGE GTE 18
  */
 @Entity
 @Table(name = "eligibility_criteria")

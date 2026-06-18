@@ -5,10 +5,9 @@ package callaou.userregistration.model.enumerations;
  * Defines the types of criteria that can be used in eligibility rules
  */
 public enum CriteriaType {
-    COUNTRY("Country criteria - validates country of residence"),
-    AGE_MIN("Minimum age criteria - validates minimum age requirement"),
-    AGE_MAX("Maximum age criteria - validates maximum age limit"),
-    CUSTOM("Custom criteria - extensible for future requirements");
+    COUNTRY("Country criteria - validates country of residence", "Country"),
+    AGE("Age criteria - validates age requirement", "Age"),
+    CUSTOM("Custom criteria - extensible for future requirements", "Custom");
 
     /**
      * The description of the criteria type.
@@ -16,12 +15,19 @@ public enum CriteriaType {
     private final String description;
 
     /**
+     * The label of the criteria type.
+     */
+    private final String label;
+
+    /**
      * Constructor for the CriteriaType enum.
      *
      * @param description the description of the criteria type
+     * @param label       the label of the criteria type
      */
-    CriteriaType(String description) {
+    CriteriaType(String description, String label) {
         this.description = description;
+        this.label = label;
     }
 
     /**
@@ -31,5 +37,14 @@ public enum CriteriaType {
      */
     public String getDescription() {
         return description;
+    }
+
+    /**
+     * Gets the label of the criteria type.
+     *
+     * @return the label of the criteria type
+     */
+    public String getLabel() {
+        return label;
     }
 }
