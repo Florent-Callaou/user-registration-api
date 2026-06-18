@@ -88,7 +88,7 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: criteria_type
+                  name: criterion_type
                   type: VARCHAR(30)
                   constraints:
                     nullable: false
@@ -98,7 +98,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: value
+                  name: criterion_value
                   type: VARCHAR(255)
                   constraints:
                     nullable: false

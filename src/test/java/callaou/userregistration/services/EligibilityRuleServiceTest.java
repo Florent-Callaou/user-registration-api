@@ -30,7 +30,7 @@ import callaou.userregistration.model.entities.EligibilityCriteria;
 import callaou.userregistration.model.entities.EligibilityRule;
 import callaou.userregistration.model.entities.User;
 import callaou.userregistration.model.enumerations.Country;
-import callaou.userregistration.model.enumerations.CriteriaType;
+import callaou.userregistration.model.enumerations.CriterionType;
 import callaou.userregistration.model.enumerations.Operator;
 import callaou.userregistration.repositories.EligibilityRuleRepository;
 
@@ -55,7 +55,7 @@ class EligibilityRuleServiceTest {
         /**
          * Object generator
          */
-        EasyRandom generator = new EasyRandom();
+        private final EasyRandom generator = new EasyRandom();
 
         /**
          * Build user given country and birthdate
@@ -94,12 +94,12 @@ class EligibilityRuleServiceTest {
          * @param priority the criterion priority
          * @return the criterion built
          */
-        private EligibilityCriteria buildCriteria(CriteriaType type, Operator operator,
+        private EligibilityCriteria buildCriteria(CriterionType type, Operator operator,
                         String value, int priority) {
                 EligibilityCriteria eligibilityCriteria = new EligibilityCriteria();
-                eligibilityCriteria.setCriteriaType(type);
+                eligibilityCriteria.setCriterionType(type);
                 eligibilityCriteria.setOperator(operator);
-                eligibilityCriteria.setValue(value);
+                eligibilityCriteria.setCriterionValue(value);
                 eligibilityCriteria.setPriority(priority);
                 return eligibilityCriteria;
         }
@@ -149,8 +149,8 @@ class EligibilityRuleServiceTest {
 
                         EligibilityRule eligibilityRule = buildRule("AND",
                                         new HashSet<>(Arrays.asList(
-                                                        buildCriteria(CriteriaType.CUSTOM, Operator.EQ, "FR", 1),
-                                                        buildCriteria(CriteriaType.CUSTOM, Operator.GTE, "18", 2))));
+                                                        buildCriteria(CriterionType.CUSTOM, Operator.EQ, "FR", 1),
+                                                        buildCriteria(CriterionType.CUSTOM, Operator.GTE, "18", 2))));
 
                         when(eligibilityRuleRepository.findByEnabled(true)).thenReturn(List.of(eligibilityRule));
 
@@ -168,7 +168,7 @@ class EligibilityRuleServiceTest {
 
                         EligibilityRule eligibilityRule = buildRule("AND",
                                         new HashSet<>(Arrays.asList(
-                                                        buildCriteria(CriteriaType.COUNTRY, Operator.EQ, "FR", 1))));
+                                                        buildCriteria(CriterionType.COUNTRY, Operator.EQ, "FR", 1))));
 
                         when(eligibilityRuleRepository.findByEnabled(true)).thenReturn(List.of(eligibilityRule));
 
@@ -182,7 +182,7 @@ class EligibilityRuleServiceTest {
 
                         EligibilityRule eligibilityRule = buildRule("AND",
                                         new HashSet<>(Arrays.asList(
-                                                        buildCriteria(CriteriaType.COUNTRY, Operator.EQ, "FR", 1))));
+                                                        buildCriteria(CriterionType.COUNTRY, Operator.EQ, "FR", 1))));
 
                         when(eligibilityRuleRepository.findByEnabled(true)).thenReturn(List.of(eligibilityRule));
 
@@ -200,7 +200,7 @@ class EligibilityRuleServiceTest {
 
                         EligibilityRule eligibilityRule = buildRule("AND",
                                         new HashSet<>(Arrays.asList(
-                                                        buildCriteria(CriteriaType.COUNTRY, Operator.NEQ, "DE", 1))));
+                                                        buildCriteria(CriterionType.COUNTRY, Operator.NEQ, "DE", 1))));
 
                         when(eligibilityRuleRepository.findByEnabled(true)).thenReturn(List.of(eligibilityRule));
 
@@ -214,7 +214,7 @@ class EligibilityRuleServiceTest {
 
                         EligibilityRule eligibilityRule = buildRule("AND",
                                         new HashSet<>(Arrays.asList(
-                                                        buildCriteria(CriteriaType.COUNTRY, Operator.NEQ, "DE", 1))));
+                                                        buildCriteria(CriterionType.COUNTRY, Operator.NEQ, "DE", 1))));
                         when(eligibilityRuleRepository.findByEnabled(true)).thenReturn(List.of(eligibilityRule));
 
                         assertThatThrownBy(() -> eligibilityRuleService.verifyUserEligibility(ineligibleUser))
@@ -231,7 +231,7 @@ class EligibilityRuleServiceTest {
 
                         EligibilityRule eligibilityRule = buildRule("AND",
                                         new HashSet<>(Arrays.asList(
-                                                        buildCriteria(CriteriaType.COUNTRY, Operator.IN, "FR,DE,ES",
+                                                        buildCriteria(CriterionType.COUNTRY, Operator.IN, "FR,DE,ES",
                                                                         1))));
 
                         when(eligibilityRuleRepository.findByEnabled(true)).thenReturn(List.of(eligibilityRule));
@@ -246,7 +246,8 @@ class EligibilityRuleServiceTest {
 
                         EligibilityRule eligibilityRule = buildRule("AND",
                                         new HashSet<>(Arrays.asList(
-                                                        buildCriteria(CriteriaType.COUNTRY, Operator.IN, "DE,ES", 1))));
+                                                        buildCriteria(CriterionType.COUNTRY, Operator.IN, "DE,ES",
+                                                                        1))));
 
                         when(eligibilityRuleRepository.findByEnabled(true)).thenReturn(List.of(eligibilityRule));
 
@@ -264,7 +265,7 @@ class EligibilityRuleServiceTest {
 
                         EligibilityRule eligibilityRule = buildRule("AND",
                                         new HashSet<>(Arrays.asList(
-                                                        buildCriteria(CriteriaType.COUNTRY, Operator.NOT_IN, "DE,ES",
+                                                        buildCriteria(CriterionType.COUNTRY, Operator.NOT_IN, "DE,ES",
                                                                         1))));
 
                         when(eligibilityRuleRepository.findByEnabled(true)).thenReturn(List.of(eligibilityRule));
@@ -279,7 +280,7 @@ class EligibilityRuleServiceTest {
 
                         EligibilityRule eligibilityRule = buildRule("AND",
                                         new HashSet<>(Arrays.asList(
-                                                        buildCriteria(CriteriaType.COUNTRY, Operator.NOT_IN, "FR,DE",
+                                                        buildCriteria(CriterionType.COUNTRY, Operator.NOT_IN, "FR,DE",
                                                                         1))));
 
                         when(eligibilityRuleRepository.findByEnabled(true)).thenReturn(List.of(eligibilityRule));
@@ -298,7 +299,7 @@ class EligibilityRuleServiceTest {
 
                         EligibilityRule eligibilityRule = buildRule("AND",
                                         new HashSet<>(Arrays.asList(
-                                                        buildCriteria(CriteriaType.COUNTRY, Operator.GTE, "JP", 1))));
+                                                        buildCriteria(CriterionType.COUNTRY, Operator.GTE, "JP", 1))));
 
                         when(eligibilityRuleRepository.findByEnabled(true)).thenReturn(List.of(eligibilityRule));
 
@@ -317,7 +318,7 @@ class EligibilityRuleServiceTest {
                         User eligibleUser = (buildUser(Country.FR, LocalDate.now().minusYears(18)));
 
                         EligibilityRule eligibilityRule = buildRule("AND", new HashSet<>(Arrays.asList(
-                                        buildCriteria(CriteriaType.AGE, Operator.GTE, "18", 1))));
+                                        buildCriteria(CriterionType.AGE, Operator.GTE, "18", 1))));
 
                         when(eligibilityRuleRepository.findByEnabled(true)).thenReturn(List.of(eligibilityRule));
 
@@ -330,7 +331,7 @@ class EligibilityRuleServiceTest {
                         User eligibleUser = (buildUser(Country.FR, LocalDate.now().minusYears(25)));
 
                         EligibilityRule eligibilityRule = buildRule("AND", new HashSet<>(Arrays.asList(
-                                        buildCriteria(CriteriaType.AGE, Operator.GTE, "18", 1))));
+                                        buildCriteria(CriterionType.AGE, Operator.GTE, "18", 1))));
 
                         when(eligibilityRuleRepository.findByEnabled(true)).thenReturn(List.of(eligibilityRule));
 
@@ -344,7 +345,7 @@ class EligibilityRuleServiceTest {
 
                         EligibilityRule eligibilityRule = buildRule("AND",
                                         new HashSet<>(Arrays.asList(
-                                                        buildCriteria(CriteriaType.AGE, Operator.GTE, "18", 1))));
+                                                        buildCriteria(CriterionType.AGE, Operator.GTE, "18", 1))));
 
                         when(eligibilityRuleRepository.findByEnabled(true)).thenReturn(List.of(eligibilityRule));
 
@@ -362,7 +363,7 @@ class EligibilityRuleServiceTest {
 
                         EligibilityRule eligibilityRule = buildRule("AND",
                                         new HashSet<>(Arrays.asList(
-                                                        buildCriteria(CriteriaType.AGE, Operator.LTE, "25", 1))));
+                                                        buildCriteria(CriterionType.AGE, Operator.LTE, "25", 1))));
 
                         when(eligibilityRuleRepository.findByEnabled(true)).thenReturn(List.of(eligibilityRule));
 
@@ -377,7 +378,7 @@ class EligibilityRuleServiceTest {
 
                         EligibilityRule eligibilityRule = buildRule("AND",
                                         new HashSet<>(List.of(
-                                                        buildCriteria(CriteriaType.AGE, Operator.LTE, "65", 1))));
+                                                        buildCriteria(CriterionType.AGE, Operator.LTE, "65", 1))));
 
                         when(eligibilityRuleRepository.findByEnabled(true)).thenReturn(List.of(eligibilityRule));
 
@@ -406,7 +407,7 @@ class EligibilityRuleServiceTest {
                         User eligibleUser = (buildUser(Country.FR, LocalDate.now().minusYears(25)));
 
                         EligibilityRule eligibilityRule = buildRule("AND", new HashSet<>(Arrays.asList(
-                                        buildCriteria(CriteriaType.AGE, Operator.GT, "18", 1))));
+                                        buildCriteria(CriterionType.AGE, Operator.GT, "18", 1))));
 
                         when(eligibilityRuleRepository.findByEnabled(true)).thenReturn(List.of(eligibilityRule));
 
@@ -420,7 +421,7 @@ class EligibilityRuleServiceTest {
 
                         EligibilityRule eligibilityRule = buildRule("AND",
                                         new HashSet<>(Arrays.asList(
-                                                        buildCriteria(CriteriaType.AGE, Operator.GT, "18", 1))));
+                                                        buildCriteria(CriterionType.AGE, Operator.GT, "18", 1))));
 
                         when(eligibilityRuleRepository.findByEnabled(true)).thenReturn(List.of(eligibilityRule));
 
@@ -438,7 +439,7 @@ class EligibilityRuleServiceTest {
 
                         EligibilityRule eligibilityRule = buildRule("AND",
                                         new HashSet<>(Arrays.asList(
-                                                        buildCriteria(CriteriaType.AGE, Operator.GT, "18", 1))));
+                                                        buildCriteria(CriterionType.AGE, Operator.GT, "18", 1))));
 
                         when(eligibilityRuleRepository.findByEnabled(true)).thenReturn(List.of(eligibilityRule));
 
@@ -456,7 +457,7 @@ class EligibilityRuleServiceTest {
 
                         EligibilityRule eligibilityRule = buildRule("AND",
                                         new HashSet<>(Arrays.asList(
-                                                        buildCriteria(CriteriaType.AGE, Operator.LTE, "75", 1))));
+                                                        buildCriteria(CriterionType.AGE, Operator.LTE, "75", 1))));
 
                         when(eligibilityRuleRepository.findByEnabled(true)).thenReturn(List.of(eligibilityRule));
 
@@ -470,7 +471,7 @@ class EligibilityRuleServiceTest {
 
                         EligibilityRule eligibilityRule = buildRule("AND",
                                         new HashSet<>(Arrays.asList(
-                                                        buildCriteria(CriteriaType.AGE, Operator.LT, "74", 1))));
+                                                        buildCriteria(CriterionType.AGE, Operator.LT, "74", 1))));
 
                         when(eligibilityRuleRepository.findByEnabled(true)).thenReturn(List.of(eligibilityRule));
 
@@ -488,7 +489,7 @@ class EligibilityRuleServiceTest {
 
                         EligibilityRule eligibilityRule = buildRule("AND",
                                         new HashSet<>(Arrays.asList(
-                                                        buildCriteria(CriteriaType.AGE, Operator.LT, "80", 1))));
+                                                        buildCriteria(CriterionType.AGE, Operator.LT, "80", 1))));
 
                         when(eligibilityRuleRepository.findByEnabled(true)).thenReturn(List.of(eligibilityRule));
 
@@ -507,7 +508,7 @@ class EligibilityRuleServiceTest {
 
                         EligibilityRule eligibilityRule = buildRule("AND",
                                         new HashSet<>(List.of(
-                                                        buildCriteria(CriteriaType.AGE, Operator.BETWEEN, "18,65",
+                                                        buildCriteria(CriterionType.AGE, Operator.BETWEEN, "18,65",
                                                                         1))));
 
                         when(eligibilityRuleRepository.findByEnabled(true)).thenReturn(List.of(eligibilityRule));
@@ -529,7 +530,7 @@ class EligibilityRuleServiceTest {
 
                         EligibilityRule eligibilityRule = buildRule("AND",
                                         new HashSet<>(Arrays.asList(
-                                                        buildCriteria(CriteriaType.AGE, Operator.BETWEEN, "18,65",
+                                                        buildCriteria(CriterionType.AGE, Operator.BETWEEN, "18,65",
                                                                         1))));
 
                         when(eligibilityRuleRepository.findByEnabled(true)).thenReturn(List.of(eligibilityRule));
@@ -547,7 +548,7 @@ class EligibilityRuleServiceTest {
                         User ineligibleUser = (buildUser(Country.FR, LocalDate.now().minusYears(66)));
 
                         EligibilityRule eligibilityRule = buildRule("AND", new HashSet<>(Arrays.asList(
-                                        buildCriteria(CriteriaType.AGE, Operator.BETWEEN, "18,65", 1))));
+                                        buildCriteria(CriterionType.AGE, Operator.BETWEEN, "18,65", 1))));
 
                         when(eligibilityRuleRepository.findByEnabled(true)).thenReturn(List.of(eligibilityRule));
 
@@ -565,7 +566,7 @@ class EligibilityRuleServiceTest {
 
                         EligibilityRule eligibilityRule = buildRule("AND",
                                         new HashSet<>(Arrays.asList(
-                                                        buildCriteria(CriteriaType.AGE, Operator.EQ, "25", 1))));
+                                                        buildCriteria(CriterionType.AGE, Operator.EQ, "25", 1))));
 
                         when(eligibilityRuleRepository.findByEnabled(true)).thenReturn(List.of(eligibilityRule));
 
@@ -584,8 +585,8 @@ class EligibilityRuleServiceTest {
                         User eligibleUser = (buildUser(Country.FR, LocalDate.now().minusYears(27)));
 
                         EligibilityRule andRule = buildRule("AND", new HashSet<>(Arrays.asList(
-                                        buildCriteria(CriteriaType.COUNTRY, Operator.EQ, "FR", 1),
-                                        buildCriteria(CriteriaType.AGE, Operator.GTE, "18", 2))));
+                                        buildCriteria(CriterionType.COUNTRY, Operator.EQ, "FR", 1),
+                                        buildCriteria(CriterionType.AGE, Operator.GTE, "18", 2))));
 
                         when(eligibilityRuleRepository.findByEnabled(true)).thenReturn(List.of(andRule));
 
@@ -600,8 +601,8 @@ class EligibilityRuleServiceTest {
                         User ineligibleUser = (buildUser(Country.US, LocalDate.now().minusYears(17)));
 
                         EligibilityRule andRule = buildRule("AND", new HashSet<>(Arrays.asList(
-                                        buildCriteria(CriteriaType.COUNTRY, Operator.EQ, "US", 1),
-                                        buildCriteria(CriteriaType.AGE, Operator.GTE, "21", 2))));
+                                        buildCriteria(CriterionType.COUNTRY, Operator.EQ, "US", 1),
+                                        buildCriteria(CriterionType.AGE, Operator.GTE, "21", 2))));
 
                         when(eligibilityRuleRepository.findByEnabled(true)).thenReturn(List.of(andRule));
 
@@ -618,8 +619,8 @@ class EligibilityRuleServiceTest {
                         User ineligibleUser = (buildUser(Country.DE, LocalDate.now().minusYears(89)));
 
                         EligibilityRule andRule = buildRule("AND", new HashSet<>(Arrays.asList(
-                                        buildCriteria(CriteriaType.COUNTRY, Operator.NEQ, "DE", 2),
-                                        buildCriteria(CriteriaType.AGE, Operator.LTE, "80", 1))));
+                                        buildCriteria(CriterionType.COUNTRY, Operator.NEQ, "DE", 2),
+                                        buildCriteria(CriterionType.AGE, Operator.LTE, "80", 1))));
 
                         when(eligibilityRuleRepository.findByEnabled(true)).thenReturn(List.of(andRule));
 
@@ -638,9 +639,9 @@ class EligibilityRuleServiceTest {
 
                         EligibilityRule eligibilityRule = buildRule("AND",
                                         new HashSet<>(Arrays.asList(
-                                                        buildCriteria(CriteriaType.AGE, Operator.GTE, "18", 2),
-                                                        buildCriteria(CriteriaType.COUNTRY, Operator.EQ, "FR", 1),
-                                                        buildCriteria(CriteriaType.COUNTRY, Operator.NEQ, "DE", 3))));
+                                                        buildCriteria(CriterionType.AGE, Operator.GTE, "18", 2),
+                                                        buildCriteria(CriterionType.COUNTRY, Operator.EQ, "FR", 1),
+                                                        buildCriteria(CriterionType.COUNTRY, Operator.NEQ, "DE", 3))));
 
                         when(eligibilityRuleRepository.findByEnabled(true)).thenReturn(List.of(eligibilityRule));
 
@@ -663,8 +664,8 @@ class EligibilityRuleServiceTest {
 
                         EligibilityRule eligibilityRule = buildRule("OR",
                                         new HashSet<>(Arrays.asList(
-                                                        buildCriteria(CriteriaType.COUNTRY, Operator.IN, "FR,JP", 1),
-                                                        buildCriteria(CriteriaType.AGE, Operator.GT, "51", 2))));
+                                                        buildCriteria(CriterionType.COUNTRY, Operator.IN, "FR,JP", 1),
+                                                        buildCriteria(CriterionType.AGE, Operator.GT, "51", 2))));
 
                         when(eligibilityRuleRepository.findByEnabled(true)).thenReturn(List.of(eligibilityRule));
 
@@ -680,8 +681,8 @@ class EligibilityRuleServiceTest {
 
                         EligibilityRule eligibilityRule = buildRule("OR",
                                         new HashSet<>(Arrays.asList(
-                                                        buildCriteria(CriteriaType.COUNTRY, Operator.EQ, "FR", 1),
-                                                        buildCriteria(CriteriaType.AGE, Operator.GTE, "18", 2))));
+                                                        buildCriteria(CriterionType.COUNTRY, Operator.EQ, "FR", 1),
+                                                        buildCriteria(CriterionType.AGE, Operator.GTE, "18", 2))));
                         when(eligibilityRuleRepository.findByEnabled(true)).thenReturn(List.of(eligibilityRule));
 
                         eligibilityRuleService.verifyUserEligibility(eligibleUser);
@@ -696,9 +697,9 @@ class EligibilityRuleServiceTest {
 
                         EligibilityRule eligibilityRule = buildRule("OR",
                                         new HashSet<>(Arrays.asList(
-                                                        buildCriteria(CriteriaType.COUNTRY, Operator.NOT_IN, "US,BE",
+                                                        buildCriteria(CriterionType.COUNTRY, Operator.NOT_IN, "US,BE",
                                                                         1),
-                                                        buildCriteria(CriteriaType.AGE, Operator.LTE, "100", 2))));
+                                                        buildCriteria(CriterionType.AGE, Operator.LTE, "100", 2))));
                         when(eligibilityRuleRepository.findByEnabled(true)).thenReturn(List.of(eligibilityRule));
 
                         assertThatThrownBy(() -> eligibilityRuleService.verifyUserEligibility(ineligibleUser))
@@ -720,10 +721,10 @@ class EligibilityRuleServiceTest {
 
                         EligibilityRule eligibilityRule1 = buildRule("AND",
                                         new HashSet<>(Arrays.asList(
-                                                        buildCriteria(CriteriaType.COUNTRY, Operator.EQ, "FR", 1))));
+                                                        buildCriteria(CriterionType.COUNTRY, Operator.EQ, "FR", 1))));
                         EligibilityRule eligibilityRule2 = buildRule("AND",
                                         new HashSet<>(Arrays.asList(
-                                                        buildCriteria(CriteriaType.AGE, Operator.GTE, "18", 1))));
+                                                        buildCriteria(CriterionType.AGE, Operator.GTE, "18", 1))));
 
                         when(eligibilityRuleRepository.findByEnabled(true))
                                         .thenReturn(List.of(eligibilityRule1, eligibilityRule2));
@@ -740,10 +741,10 @@ class EligibilityRuleServiceTest {
 
                         EligibilityRule eligibilityRule1 = buildRule("AND",
                                         new HashSet<>(Arrays.asList(
-                                                        buildCriteria(CriteriaType.COUNTRY, Operator.EQ, "FR", 1))));
+                                                        buildCriteria(CriterionType.COUNTRY, Operator.EQ, "FR", 1))));
                         EligibilityRule eligibilityRule2 = buildRule("AND",
                                         new HashSet<>(Arrays.asList(
-                                                        buildCriteria(CriteriaType.AGE, Operator.GTE, "18", 1))));
+                                                        buildCriteria(CriterionType.AGE, Operator.GTE, "18", 1))));
                         when(eligibilityRuleRepository.findByEnabled(true))
                                         .thenReturn(List.of(eligibilityRule1, eligibilityRule2));
 

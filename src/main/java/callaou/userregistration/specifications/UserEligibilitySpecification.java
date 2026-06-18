@@ -3,7 +3,7 @@ package callaou.userregistration.specifications;
 import java.time.LocalDate;
 
 import callaou.userregistration.model.entities.User;
-import callaou.userregistration.model.enumerations.CriteriaType;
+import callaou.userregistration.model.enumerations.CriterionType;
 import callaou.userregistration.model.enumerations.Operator;
 import callaou.userregistration.specifications.utils.CriteriaValueParser;
 
@@ -20,14 +20,14 @@ public interface UserEligibilitySpecification {
     /**
      * Creates a specification based on the criteria type and value.
      *
-     * @param criteriaType the type of criteria
-     * @param value        the value for the criteria
+     * @param criterionType the type of criteria
+     * @param value         the value for the criteria
      * @return the specification
      */
-    static UserEligibilitySpecification fromCriteria(CriteriaType criteriaType,
+    static UserEligibilitySpecification fromCriteria(CriterionType criterionType,
             Operator operator,
             String value) {
-        return switch (criteriaType) {
+        return switch (criterionType) {
             case COUNTRY -> countrySpecification(operator, value);
             case AGE -> ageSpecification(operator, value);
             case CUSTOM -> user -> true;

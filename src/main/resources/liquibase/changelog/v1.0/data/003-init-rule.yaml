@@ -23,13 +23,13 @@ databaseChangeLog:
             tableName: eligibility_criteria
             columns:
               - column:
-                  name: criteria_type
+                  name: criterion_type
                   value: "COUNTRY"
               - column:
                   name: operator
-                  value: "EQUALS"
+                  value: "EQ"
               - column:
-                  name: value
+                  name: criterion_value
                   value: "FR"
               - column:
                   name: max_value
@@ -47,13 +47,13 @@ databaseChangeLog:
             tableName: eligibility_criteria
             columns:
               - column:
-                  name: criteria_type
+                  name: criterion_type
                   value: "AGE"
               - column:
                   name: operator
-                  value: "GREATER_OR_EQUAL"
+                  value: "GTE"
               - column:
-                  name: value
+                  name: criterion_value
                   value: "18"
               - column:
                   name: max_value
