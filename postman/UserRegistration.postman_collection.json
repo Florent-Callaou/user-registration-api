@@ -359,6 +359,35 @@
                       "response": []
                     }
                   ]
+                },
+                {
+                  "name": "registerUser - 400 - multiple validation errors",
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"birthdate\": \"1992-07-15\",\r\n    \"phoneNumber\": \"+3361234567741747243741718\",\r\n    \"gender\": \"FEMALE\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/api/users",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "api",
+                        "users"
+                      ]
+                    }
+                  },
+                  "response": []
                 }
               ]
             },
@@ -659,7 +688,7 @@
                 "header": [],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\r\n    \"username\": \"isabelle.lamy\",\r\n    \"birthdate\": \"1992-07-15\",\r\n    \"countryOfResidence\": \"DE\",\r\n    \"phoneNumber\": \"+33612345678\",\r\n    \"gender\": \"FEMALE\"\r\n}",
+                  "raw": "{\r\n    \"username\": \"isabelle.lamy\",\r\n    \"birthdate\": \"1991-07-15\",\r\n    \"countryOfResidence\": \"FR\",\r\n    \"phoneNumber\": \"+33612345678\",\r\n    \"gender\": \"FEMALE\"\r\n}",
                   "options": {
                     "raw": {
                       "language": "json"
