@@ -30,6 +30,7 @@
 		<java.version>25</java.version>
 		<jacoco-maven-plugin.version>0.8.15</jacoco-maven-plugin.version>
 		<easy-random.version>6.0.0</easy-random.version>
+		<aop.version>4.0.0-M2</aop.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -109,6 +110,13 @@
 			<groupId>com.fasterxml.jackson.datatype</groupId>
 			<artifactId>jackson-datatype-jsr310</artifactId>
 		</dependency>
+
+		<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+			<version>${aop.version}</version>
+        </dependency>
+
 	</dependencies>
 
 	<build>
