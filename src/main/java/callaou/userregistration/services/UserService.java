@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import callaou.userregistration.exceptions.AlreadyExistsException;
+import callaou.userregistration.logging.Loggable;
 import callaou.userregistration.mappers.UserMapper;
 import callaou.userregistration.model.dtos.UserRequest;
 import callaou.userregistration.model.dtos.UserResponse;
@@ -57,6 +58,7 @@ public class UserService {
      * @param userRequest the user info to save
      * @return the user info
      */
+    @Loggable(logArgs = true, logResult = true, logTime = true)
     public UserResponse registerUser(UserRequest userRequest) {
         String username = userRequest.username();
         LocalDate birthdate = userRequest.birthdate();
@@ -83,6 +85,7 @@ public class UserService {
      * @param filters  the filters
      * @return a page of users found
      */
+    @Loggable(logArgs = true, logResult = true, logTime = true)
     public Page<UserResponse> findUsersByCriteria(Pageable pageable, Map<String, Object> filters) {
         GenericSpecification<User> specification = new GenericSpecification<>(filters);
 

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import callaou.userregistration.exceptions.AlreadyExistsException;
 import callaou.userregistration.exceptions.UserNotEligibleException;
 import callaou.userregistration.exceptions.enumerations.ErrorCode;
+import callaou.userregistration.logging.Loggable;
 import callaou.userregistration.model.dtos.ErrorResponse;
 import callaou.userregistration.model.dtos.FieldError;
 import tools.jackson.databind.exc.InvalidFormatException;
@@ -58,9 +59,9 @@ public class GlobalExceptionHandler {
          * @return ResponseEntity containing the error response
          */
         @ExceptionHandler(MethodArgumentNotValidException.class)
+        @Loggable(logArgs = true, logResult = true)
         public ResponseEntity<ErrorResponse> handleValidation(
                         MethodArgumentNotValidException methodArgumentNotValidException) {
-
                 List<FieldError> fieldErrors = methodArgumentNotValidException.getBindingResult()
                                 .getFieldErrors()
                                 .stream()
@@ -76,6 +77,7 @@ public class GlobalExceptionHandler {
         }
 
         @ExceptionHandler(HttpMessageNotReadableException.class)
+        @Loggable(logArgs = true, logResult = true)
         public ResponseEntity<ErrorResponse> handleInvalidEnum(HttpMessageNotReadableException ex) {
                 Throwable cause = ex.getMostSpecificCause();
                 if (cause instanceof InvalidFormatException invalidFormat

@@ -3,13 +3,9 @@ package callaou.userregistration.logging;
 import java.time.Instant;
 import java.util.Arrays;
 
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;
@@ -74,55 +70,5 @@ public class LoggingAspect {
                     className, methodName, executionTime, e.getMessage(), e);
             throw e;
         }
-    }
-
-    /**
-     * Before advice for logging method entry
-     * 
-     * @param joinPoint the join point
-     * @param loggable  the loggable
-     */
-    @Before("@annotation(loggable)")
-    public void logMethodEntry(JoinPoint joinPoint, Loggable loggable) {
-        if (!loggable.logArgs()) {
-            String methodName = joinPoint.getSignature().getName();
-            String className = joinPoint.getTarget().getClass().getSimpleName();
-            log.debug("{}.{} started", className, methodName);
-        }
-    }
-
-    /**
-     * After returning advice for successful method execution
-     * 
-     * @param joinPoint the join point
-     * @param loggable  the loggable
-     * @param result    the result
-     */
-    @AfterReturning(pointcut = "@annotation(loggable)", returning = "result")
-    public void logMethodExit(JoinPoint joinPoint, Loggable loggable, Object result) {
-        if (!loggable.logTime()) {
-            String methodName = joinPoint.getSignature().getName();
-            String className = joinPoint.getTarget().getClass().getSimpleName();
-
-            if (loggable.logResult()) {
-                log.debug("{}.{} finished with result: {}", className, methodName, result);
-            } else {
-                log.debug("{}.{} finished", className, methodName);
-            }
-        }
-    }
-
-    /**
-     * After throwing advice for logging exceptions
-     * 
-     * @param joinPoint the join point
-     * @param loggable  the loggable
-     * @param exception the exception thrown
-     */
-    @AfterThrowing(pointcut = "@annotation(loggable)", throwing = "exception")
-    public void logMethodException(JoinPoint joinPoint, Loggable loggable, Exception exception) {
-        String methodName = joinPoint.getSignature().getName();
-        String className = joinPoint.getTarget().getClass().getSimpleName();
-        log.error("{}.{} threw exception: {}", className, methodName, exception.getMessage(), exception);
     }
 }

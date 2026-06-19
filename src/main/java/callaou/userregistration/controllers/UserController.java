@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import callaou.userregistration.logging.Loggable;
 import callaou.userregistration.model.dtos.UserRequest;
 import callaou.userregistration.model.dtos.UserResponse;
 import callaou.userregistration.services.UserService;
@@ -47,6 +48,7 @@ public class UserController {
      * @return the user info after creation
      */
     @PostMapping
+    @Loggable(logArgs = true, logResult = true)
     public ResponseEntity<UserResponse> registerUser(@Valid @RequestBody UserRequest userRequest) {
         UserResponse response = userService.registerUser(userRequest);
 
@@ -61,6 +63,7 @@ public class UserController {
      * @return the page of users found
      */
     @GetMapping
+    @Loggable(logArgs = true, logResult = true)
     public ResponseEntity<Page<UserResponse>> getUsersByCriteria(
             @PageableDefault(sort = "username") Pageable pageable,
             @RequestParam Map<String, Object> filters) {

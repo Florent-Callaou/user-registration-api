@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import callaou.userregistration.exceptions.UserNotEligibleException;
+import callaou.userregistration.logging.Loggable;
 import callaou.userregistration.model.entities.EligibilityCriteria;
 import callaou.userregistration.model.entities.EligibilityRule;
 import callaou.userregistration.model.entities.User;
@@ -39,6 +40,7 @@ public class EligibilityRuleService {
      * 
      * @param user the User to verify
      */
+    @Loggable(logArgs = true, logResult = true)
     public void verifyUserEligibility(User user) {
         List<EligibilityRule> eligibilityRules = eligibilityRuleRepository.findByEnabled(true);
 
