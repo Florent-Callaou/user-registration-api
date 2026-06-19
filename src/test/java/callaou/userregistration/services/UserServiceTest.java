@@ -13,6 +13,7 @@ import static org.mockito.Mockito.when;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.jeasy.random.EasyRandom;
 import org.junit.jupiter.api.DisplayName;
@@ -33,6 +34,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 
 import callaou.userregistration.exceptions.AlreadyExistsException;
+import callaou.userregistration.exceptions.ObjectNotFoundException;
 import callaou.userregistration.exceptions.UserNotEligibleException;
 import callaou.userregistration.mappers.UserMapper;
 import callaou.userregistration.model.dtos.UserRequest;
@@ -342,6 +344,46 @@ class UserServiceTest {
                         assertThat(pageableCaptor.getValue()).isEqualTo(pageable);
 
                         verify(userRepository).findAll(any(Specification.class), eq(pageable));
+                }
+        }
+
+        @Nested
+        @DisplayName("findUserById")
+        class FindUserById {
+                @Test
+                @DisplayName("should return found user")
+                void shouldReturnFoundUser() {
+                        User userFound = generator.nextObject(User.class);
+
+                        when(userRepository.findById(any())).thenReturn(Optional.of(userFound));
+
+                        UserResponse userResponse = userService.findUserById(1L);
+
+                        assertThat(userResponse).isNotNull();
+                        assertThat(userResponse.id()).isEqualTo(userFound.getId());
+                        assertThat(userResponse.username()).isEqualTo(userFound.getUsername());
+                        assertThat(userResponse.birthdate()).isEqualTo(userFound.getBirthdate());
+                        assertThat(userResponse.countryOfResidence()).isEqualTo(userFound.getCountryOfResidence());
+                        assertThat(userResponse.phoneNumber()).isEqualTo(userFound.getPhoneNumber());
+                        assertThat(userResponse.gender()).isEqualTo(userFound.getGender());
+
+                        verify(userRepository).findById(any());
+                        verify(userRepository).findById(1L);
+                }
+
+                @Test
+                @DisplayName("should throw when user not found")
+                void shouldThrowWhenUserNotFound() {
+                        when(userRepository.findById(any())).thenReturn(Optional.empty());
+
+                        assertThatThrownBy(() -> userService.findUserById(1L))
+                                        .isInstanceOf(ObjectNotFoundException.class)
+                                        .hasMessage("Failed to find object of type User related to id: 1")
+                                        .extracting("errorCode.httpStatus")
+                                        .isEqualTo(HttpStatus.NOT_FOUND);
+
+                        verify(userRepository).findById(any());
+                        verify(userRepository).findById(1L);
                 }
         }
 }
