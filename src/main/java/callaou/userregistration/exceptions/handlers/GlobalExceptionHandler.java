@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import callaou.userregistration.exceptions.AlreadyExistsException;
+import callaou.userregistration.exceptions.ObjectNotFoundException;
+import callaou.userregistration.exceptions.ObjectNotFoundException;
 import callaou.userregistration.exceptions.UserNotEligibleException;
 import callaou.userregistration.exceptions.enumerations.ErrorCode;
 import callaou.userregistration.logging.Loggable;
@@ -34,6 +36,21 @@ public class GlobalExceptionHandler {
                                 .status(alreadyExistsException.getErrorCode().getHttpStatus())
                                 .body(ErrorResponse.of(alreadyExistsException.getErrorCode(),
                                                 alreadyExistsException.getMessage()));
+        }
+
+        /**
+         * Handles ObjectNotFoundException and returns an appropriate error response.
+         * 
+         * @param objectNotFoundException the exception to handle
+         * @return ResponseEntity containing the error response
+         */
+        @ExceptionHandler(ObjectNotFoundException.class)
+        public ResponseEntity<ErrorResponse> handleObjectNotFoundException(
+                        ObjectNotFoundException objectNotFoundException) {
+                return ResponseEntity
+                                .status(objectNotFoundException.getErrorCode().getHttpStatus())
+                                .body(ErrorResponse.of(objectNotFoundException.getErrorCode(),
+                                                objectNotFoundException.getMessage()));
         }
 
         /**

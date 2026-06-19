@@ -801,7 +801,6 @@ class UserControllerTest {
                                         .andExpect(status().isNotFound())
                                         .andExpect(jsonPath("$.code").value("404"))
                                         .andExpect(jsonPath("$.message").exists());
-                        ;
                 }
         }
 }
