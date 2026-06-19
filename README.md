@@ -50,7 +50,7 @@ git clone git@github.com:Florent-Callaou/user-registration-api.git
 
 - Enter the project folder :
 ```bash
-cd user-registration 
+cd user-registration-api
 ```
 
 ### Run the application
