@@ -1,6 +1,7 @@
 package callaou.userregistration.specifications;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -8,6 +9,7 @@ import java.util.Map;
 import org.jspecify.annotations.Nullable;
 import org.springframework.data.jpa.domain.Specification;
 
+import callaou.userregistration.exceptions.BadRequestException;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Path;
@@ -70,19 +72,25 @@ public class GenericSpecification<T> implements Specification<T> {
     private Predicate buildPredicate(Root<T> root, CriteriaBuilder criteriaBuilder, String fieldPath, Object value) {
         Path<?> path = resolvePath(root, fieldPath);
 
+        Class<?> javaType = path.getJavaType();
+
         if (value == null) {
             return criteriaBuilder.isNull(path);
         }
 
-        if (value instanceof String stringValue) {
-            return likeIgnoreCase(criteriaBuilder, path, stringValue);
+        if (javaType == String.class) {
+            return likeIgnoreCase(criteriaBuilder, path, value.toString());
         }
 
-        if (value instanceof Enum<?> enumValue) {
-            return likeIgnoreCase(criteriaBuilder, path, enumValue.name());
+        if (javaType.isEnum()) {
+            String enumName = (value instanceof Enum<?> enumValue) ? enumValue.name() : value.toString();
+            return likeIgnoreCase(criteriaBuilder, path, enumName);
         }
 
-        if (value instanceof LocalDate dateValue) {
+        if (javaType == LocalDate.class) {
+            LocalDate dateValue = (value instanceof LocalDate localDate)
+                    ? localDate
+                    : parseDate(value.toString());
             return criteriaBuilder.equal(path.as(LocalDate.class), dateValue);
         }
 
@@ -121,4 +129,18 @@ public class GenericSpecification<T> implements Specification<T> {
         return path;
     }
 
+    /**
+     * Parse String value as date
+     * 
+     * @param rawValue the string Value
+     * @return the parsed LocalDate
+     */
+    private LocalDate parseDate(String rawValue) {
+        try {
+            return LocalDate.parse(rawValue);
+        } catch (DateTimeParseException _) {
+            throw new BadRequestException(
+                    "Invalid date value '" + rawValue + "', expected format yyyy-MM-dd");
+        }
+    }
 }
