@@ -37,6 +37,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import callaou.userregistration.exceptions.AlreadyExistsException;
+import callaou.userregistration.exceptions.ObjectNotFoundException;
 import callaou.userregistration.exceptions.UserNotEligibleException;
 import callaou.userregistration.model.dtos.UserRequest;
 import callaou.userregistration.model.dtos.UserResponse;
@@ -646,8 +647,8 @@ class UserControllerTest {
         }
 
         @Nested
-        @DisplayName("GET /api/users - no erros")
-        class NoErrorsGet {
+        @DisplayName("GET /api/users - no errors")
+        class NoErrorsGetByCriteria {
                 @SuppressWarnings("unchecked")
                 @Test
                 @DisplayName("should return 200 with a page of users when no filters are provided")
@@ -770,6 +771,37 @@ class UserControllerTest {
                         assertThat(order).isNotNull();
                         assertThat(order.getDirection())
                                         .isEqualTo(Sort.Direction.DESC);
+                }
+        }
+
+        @Nested
+        @DisplayName("GET /api/users/{id} - no errors")
+        class NoErrorsGet {
+                @Test
+                @DisplayName("should return 200 with a user reponse when id exists")
+                void shouldReturn200WithUser() throws Exception {
+                        when(userService.findUserById(any())).thenReturn(validResponse);
+
+                        mockMvc.perform(get("/api/users/{id}", 1L).with(csrf()))
+                                        .andExpect(status().isOk())
+                                        .andExpect(jsonPath("$.id").value(1L))
+                                        .andExpect(jsonPath("$.username").value("patrick.murin"));
+                }
+
+                @Test
+                @DisplayName("should return 404 when user not found")
+                void shouldReturn404WhenUserNotFound() throws Exception {
+                        Long id = 2L;
+
+                        when(userService.findUserById(id))
+                                        .thenThrow(new ObjectNotFoundException(User.class, "id", id.toString()));
+
+                        mockMvc.perform(get("/api/users/{id}", id)
+                                        .with(csrf()))
+                                        .andExpect(status().isNotFound())
+                                        .andExpect(jsonPath("$.code").value("404"))
+                                        .andExpect(jsonPath("$.message").exists());
+                        ;
                 }
         }
 }
