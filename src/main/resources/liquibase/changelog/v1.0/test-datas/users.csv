@@ -1,5 +1,4 @@
 username;birthdate;country_of_residence;phone_number;gender
-username;birthdate;country_of_residence;phone_number;gender
 alice.legrand;1990-05-12;FR;+33123456789;FEMALE
 benjamin.dupont;1985-11-03;FR;+33698765432;MALE
 camille.martin;1998-07-21;FR;+33744556677;NON_BINARY
