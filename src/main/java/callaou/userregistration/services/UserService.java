@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import callaou.userregistration.exceptions.AlreadyExistsException;
+import callaou.userregistration.exceptions.ObjectNotFoundException;
 import callaou.userregistration.logging.Loggable;
 import callaou.userregistration.mappers.UserMapper;
 import callaou.userregistration.model.dtos.UserRequest;
@@ -90,6 +91,18 @@ public class UserService {
         GenericSpecification<User> specification = new GenericSpecification<>(filters);
 
         return userRepository.findAll(specification, pageable).map(userMapper::toResponse);
+    }
+
+    /**
+     * Find a user by its id
+     * 
+     * @param id the user id
+     * @return the found user
+     */
+    @Loggable(logArgs = true, logResult = true, logTime = true)
+    public UserResponse findUserById(Long id) {
+        return userRepository.findById(id).map(userMapper::toResponse)
+                .orElseThrow(() -> new ObjectNotFoundException(User.class, "id", id.toString()));
     }
 
 }

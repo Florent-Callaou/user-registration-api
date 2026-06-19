@@ -783,6 +783,40 @@
               "response": []
             },
             {
+              "name": "getUserByCriteria - 200 - filter id",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/users?page=0&size=5&id=21",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "5"
+                    },
+                    {
+                      "key": "id",
+                      "value": "21"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
               "name": "getUserByCriteria - 200 - filter username",
               "request": {
                 "method": "GET",
@@ -1093,6 +1127,63 @@
                       "key": "birthdate",
                       "value": "not a date"
                     }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Get User by id",
+      "item": [
+        {
+          "name": "No Errors",
+          "item": [
+            {
+              "name": "findByUserId - 200 - user found",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/users/25",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users",
+                    "25"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Errors",
+          "item": [
+            {
+              "name": "findByUserId - 404- user fnot found",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/users/9685",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users",
+                    "9685"
                   ]
                 }
               },

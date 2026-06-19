@@ -8,6 +8,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -75,4 +76,19 @@ public class UserController {
 
         return ResponseEntity.ok().body(pageResponse);
     }
+
+    /**
+     * Get a user by its id
+     * 
+     * @param id the user id
+     * @return the found user as a reponse
+     */
+    @GetMapping("/{id}")
+    @Loggable(logArgs = true, logResult = true)
+    public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
+        UserResponse userResponse = userService.findUserById(id);
+
+        return ResponseEntity.ok().body(userResponse);
+    }
+
 }
