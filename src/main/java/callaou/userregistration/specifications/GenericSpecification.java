@@ -1,6 +1,8 @@
 package callaou.userregistration.specifications;
 
 import java.time.LocalDate;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.jspecify.annotations.Nullable;
@@ -28,7 +30,7 @@ public class GenericSpecification<T> implements Specification<T> {
      * @param filters the map of filters
      */
     public GenericSpecification(Map<String, Object> filters) {
-        this.filters = Map.copyOf(filters);
+        this.filters = Collections.unmodifiableMap(new LinkedHashMap<>(filters));
     }
 
     /**

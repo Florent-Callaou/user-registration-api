@@ -2,7 +2,7 @@ databaseChangeLog:
   - changeSet:
       id: 001-add-rule-adults-202606171118
       author: florent.callaou
-      comments: "add initial eligibility rule for french adults — default rule (FR + AGE min 18)"
+      comments: "add initial eligibility rule for french adults - default rule (FR + AGE min 18)"
       changes:
         - insert:
             tableName: eligibility_rules

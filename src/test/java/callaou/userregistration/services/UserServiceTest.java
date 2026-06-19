@@ -69,7 +69,7 @@ class UserServiceTest {
         private final EasyRandom generator = new EasyRandom();
 
         @Nested
-        @DisplayName("registerUser — no errors")
+        @DisplayName("registerUser - no errors")
         class NoErrors {
                 @Test
                 @DisplayName("should return UserResponse when user is new and eligible")
@@ -200,7 +200,7 @@ class UserServiceTest {
         }
 
         @Nested
-        @DisplayName("registerUser — duplicate user")
+        @DisplayName("registerUser - duplicate user")
         class DuplicateUser {
                 @Test
                 @DisplayName("should throw AlreadyExistsException when user already exists")
@@ -234,7 +234,7 @@ class UserServiceTest {
         }
 
         @Nested
-        @DisplayName("registerUser — eligibility failure")
+        @DisplayName("registerUser - eligibility failure")
         class EligibilityFailure {
                 @Test
                 @DisplayName("should propagate UserNotEligibleException from eligibility service")
