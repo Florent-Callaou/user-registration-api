@@ -25,6 +25,7 @@ logging:
   level:
     root: INFO
     '[callaou.userregistration]': DEBUG
+    '[org.springframework.data.web.config.SpringDataJackson3Configuration$PageModule$WarningLoggingModifier]': OFF
   pattern:
     console: "%clr(%d{yyyy-MM-dd HH:mm:ss}){faint} %clr([%thread]){magenta} %clr(%-5level) %clr(%logger{36}){cyan} - %msg%n"
     file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
