@@ -1,22 +1,32 @@
 package callaou.userregistration.controllers;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -635,4 +645,131 @@ class UserControllerTest {
                 }
         }
 
+        @Nested
+        @DisplayName("GET /api/users - no erros")
+        class NoErrorsGet {
+                @SuppressWarnings("unchecked")
+                @Test
+                @DisplayName("should return 200 with a page of users when no filters are provided")
+                void shouldReturn200WithNoFilters() throws Exception {
+                        Page<UserResponse> page = new PageImpl<>(
+                                        List.of(validResponse),
+                                        PageRequest.of(0, 20),
+                                        1);
+
+                        when(userService.findUsersByCriteria(any(Pageable.class), any(Map.class)))
+                                        .thenReturn(page);
+
+                        mockMvc.perform(get("/api/users").with(csrf()))
+                                        .andExpect(status().isOk())
+                                        .andExpect(jsonPath("$.content").isArray())
+                                        .andExpect(jsonPath("$.content[0].username").value("patrick.murin"))
+                                        .andExpect(jsonPath("$.totalElements").value(1));
+                }
+
+                @SuppressWarnings("unchecked")
+                @Test
+                @DisplayName("should return 200 with a page of users when filters are provided")
+                void shouldReturn200WithFilters() throws Exception {
+                        Page<UserResponse> page = new PageImpl<>(
+                                        List.of(validResponse),
+                                        PageRequest.of(0, 20),
+                                        1);
+
+                        when(userService.findUsersByCriteria(any(Pageable.class), any(Map.class)))
+                                        .thenReturn(page);
+
+                        mockMvc.perform(get("/api/users")
+                                        .with(csrf())
+                                        .param("username", "pat")
+                                        .param("countryOfResidence", "FR"))
+                                        .andExpect(status().isOk())
+                                        .andExpect(jsonPath("$.content[0].username").value("patrick.murin"));
+                }
+
+                @SuppressWarnings("unchecked")
+                @Test
+                @DisplayName("should return 200 with an empty page when no users match")
+                void shouldReturn200WithEmptyPage() throws Exception {
+                        Page<UserResponse> emptyPage = new PageImpl<>(
+                                        List.of(),
+                                        PageRequest.of(0, 20),
+                                        0);
+
+                        when(userService.findUsersByCriteria(any(Pageable.class), any(Map.class)))
+                                        .thenReturn(emptyPage);
+
+                        mockMvc.perform(get("/api/users")
+                                        .with(csrf())
+                                        .param("username", "nonexistent"))
+                                        .andExpect(status().isOk())
+                                        .andExpect(jsonPath("$.content").isEmpty())
+                                        .andExpect(jsonPath("$.totalElements").value(0));
+                }
+        }
+
+        @Nested
+        @DisplayName("GET /api/users - pagination")
+        class Pagination {
+                @SuppressWarnings("unchecked")
+                @Test
+                @DisplayName("should default sort to 'username' when not specified")
+                void shouldDefaultSortToUsername() throws Exception {
+                        when(userService.findUsersByCriteria(any(Pageable.class), any(Map.class)))
+                                        .thenReturn(Page.empty());
+
+                        mockMvc.perform(get("/api/users").with(csrf()))
+                                        .andExpect(status().isOk());
+
+                        ArgumentCaptor<Pageable> captor = ArgumentCaptor
+                                        .forClass(Pageable.class);
+                        verify(userService).findUsersByCriteria(captor.capture(), any(Map.class));
+
+                        Sort.Order order = captor.getValue().getSort().getOrderFor("username");
+                        assertThat(order).isNotNull();
+                }
+
+                @SuppressWarnings("unchecked")
+                @Test
+                @DisplayName("should respect explicit page and size params")
+                void shouldRespectPageAndSizeParams() throws Exception {
+                        when(userService.findUsersByCriteria(any(Pageable.class), any(Map.class)))
+                                        .thenReturn(Page.empty());
+
+                        mockMvc.perform(get("/api/users")
+                                        .with(csrf())
+                                        .param("page", "2")
+                                        .param("size", "5"))
+                                        .andExpect(status().isOk());
+
+                        ArgumentCaptor<Pageable> captor = ArgumentCaptor
+                                        .forClass(Pageable.class);
+                        verify(userService).findUsersByCriteria(captor.capture(), any(Map.class));
+
+                        assertThat(captor.getValue().getPageNumber()).isEqualTo(2);
+                        assertThat(captor.getValue().getPageSize()).isEqualTo(5);
+                }
+
+                @SuppressWarnings("unchecked")
+                @Test
+                @DisplayName("should respect explicit sort param over the default")
+                void shouldRespectExplicitSortParam() throws Exception {
+                        when(userService.findUsersByCriteria(any(Pageable.class), any(Map.class)))
+                                        .thenReturn(Page.empty());
+
+                        mockMvc.perform(get("/api/users")
+                                        .with(csrf())
+                                        .param("sort", "birthdate,desc"))
+                                        .andExpect(status().isOk());
+
+                        ArgumentCaptor<Pageable> captor = ArgumentCaptor
+                                        .forClass(Pageable.class);
+                        verify(userService).findUsersByCriteria(captor.capture(), any(Map.class));
+
+                        Sort.Order order = captor.getValue().getSort().getOrderFor("birthdate");
+                        assertThat(order).isNotNull();
+                        assertThat(order.getDirection())
+                                        .isEqualTo(Sort.Direction.DESC);
+                }
+        }
 }
