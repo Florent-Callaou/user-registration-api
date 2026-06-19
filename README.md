@@ -226,6 +226,7 @@ For validation errors (`400`), `fieldErrors` is populated per invalid field:
 | Code | HTTP status |
 |---|---|
 | `400` | Bad Request |
+| `404` | Not Found |
 | `409` | Conflict |
 | `422` | Unprocessable Entity |
 | `500` | Internal Server Error |
