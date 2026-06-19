@@ -1169,7 +1169,7 @@
           "name": "Errors",
           "item": [
             {
-              "name": "findByUserId - 404- user fnot found",
+              "name": "findByUserId - 404- user not found",
               "request": {
                 "method": "GET",
                 "header": [],
@@ -1184,6 +1184,27 @@
                     "api",
                     "users",
                     "9685"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "findByUserId - 500 - id not numeric",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/users/na",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users",
+                    "na"
                   ]
                 }
               },
