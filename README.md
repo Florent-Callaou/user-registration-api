@@ -36,7 +36,7 @@ A user registration REST API built with Spring Boot 4 and Java 25. The service v
 
 ## Getting started
 
-## Clone repository 
+### Clone repository 
 - Clone the repository into a folder: 
 HTTPS :
 ```bash
