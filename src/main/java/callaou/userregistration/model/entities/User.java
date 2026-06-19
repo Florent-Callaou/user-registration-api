@@ -1,0 +1,69 @@
+package callaou.userregistration.model.entities;
+
+import java.time.LocalDate;
+
+import callaou.userregistration.model.enumerations.Country;
+import callaou.userregistration.model.enumerations.Gender;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+/**
+ * Entity representing a user in the system.
+ */
+@Entity
+@Table(name = "users", uniqueConstraints = {
+        @UniqueConstraint(name = "uk_user_composite", columnNames = { "username", "birthdate", "country" })
+})
+@Getter
+@Setter
+@NoArgsConstructor
+public class User {
+    /**
+     * The unique identifier for the user.
+     */
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    /**
+     * The username for the user.
+     */
+    @Column(nullable = false, length = 50)
+    private String username;
+
+    /**
+     * The birthdate for the user.
+     */
+    @Column(nullable = false)
+    private LocalDate birthdate;
+
+    /**
+     * The country of residence for the user.
+     */
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 2)
+    private Country countryOfResidence;
+
+    /**
+     * The phone number for the user.
+     */
+    @Column(length = 20)
+    private String phoneNumber;
+
+    /**
+     * The gender for the user.
+     */
+    @Enumerated(EnumType.STRING)
+    @Column(length = 30)
+    private Gender gender;
+}

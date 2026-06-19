@@ -1,0 +1,125 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-create-table-users-202606171007
+      author: florent.callaou
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: username
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: birthdate
+                  type: DATE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: country_of_residence
+                  type: VARCHAR(2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: phone_number
+                  type: VARCHAR(20)
+              - column:
+                  name: gender
+                  type: VARCHAR(30)
+
+  - changeSet:
+      id: 002-create-table-eligibility_rules-202606171107
+      author: florent.callaou
+      changes:
+        - createTable:
+            tableName: eligibility_rules
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: description
+                  type: TEXT
+                  constraints:
+                    nullable: true
+              - column:
+                  name: enabled
+                  type: BOOLEAN
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false
+              - column:
+                  name: operator
+                  type: VARCHAR(10)
+                  defaultValue: "AND"
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: 003-create-table-eligibility_criteria-202606171108
+      author: florent.callaou
+      changes:
+        - createTable:
+            tableName: eligibility_criteria
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: criterion_type
+                  type: VARCHAR(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: operator
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: criterion_value
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: max_value
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: description
+                  type: TEXT
+                  constraints:
+                    nullable: true
+              - column:
+                  name: priority
+                  type: INT
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: rule_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false

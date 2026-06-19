@@ -1,0 +1,389 @@
+package callaou.userregistration.services;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+import org.jeasy.random.EasyRandom;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Spy;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
+
+import callaou.userregistration.exceptions.AlreadyExistsException;
+import callaou.userregistration.exceptions.ObjectNotFoundException;
+import callaou.userregistration.exceptions.UserNotEligibleException;
+import callaou.userregistration.mappers.UserMapper;
+import callaou.userregistration.model.dtos.UserRequest;
+import callaou.userregistration.model.dtos.UserResponse;
+import callaou.userregistration.model.entities.User;
+import callaou.userregistration.model.enumerations.Country;
+import callaou.userregistration.model.enumerations.Gender;
+import callaou.userregistration.repositories.UserRepository;
+
+/**
+ * Unit tests for {@link UserService}
+ */
+@ExtendWith(MockitoExtension.class)
+class UserServiceTest {
+
+        /**
+         * Inject the UserService
+         */
+        @InjectMocks
+        private UserService userService;
+
+        /**
+         * Inject the UserRepository
+         */
+        @Mock
+        private UserRepository userRepository;
+
+        /**
+         * Inject the EligibilityRuleService
+         */
+        @Mock
+        private EligibilityRuleService eligibilityRuleService;
+
+        /**
+         * Spy on the UserMapper
+         */
+        @Spy
+        private UserMapper userMapper;
+
+        /**
+         * Object generator
+         */
+        private final EasyRandom generator = new EasyRandom();
+
+        @Nested
+        @DisplayName("registerUser - no errors")
+        class NoErrors {
+                @Test
+                @DisplayName("should return UserResponse when user is new and eligible")
+                void shouldRegisterSuccessfully() {
+                        UserRequest validRequest = new UserRequest(
+                                        "jean.jacques",
+                                        LocalDate.now().minusYears(25),
+                                        Country.FR,
+                                        "+33014852636",
+                                        Gender.MALE);
+
+                        when(userRepository.existsByUsernameAndBirthdateAndCountryOfResidence(any(), any(), any()))
+                                        .thenReturn(false);
+
+                        doNothing().when(eligibilityRuleService).verifyUserEligibility(any(User.class));
+
+                        User savedUser = new User();
+                        savedUser.setUsername(validRequest.username());
+                        savedUser.setBirthdate(validRequest.birthdate());
+                        savedUser.setCountryOfResidence(validRequest.countryOfResidence());
+                        savedUser.setPhoneNumber(validRequest.phoneNumber());
+                        savedUser.setGender(validRequest.gender());
+
+                        when(userRepository.save(any(User.class))).thenReturn(savedUser);
+
+                        UserResponse response = userService.registerUser(validRequest);
+
+                        assertThat(response).isNotNull();
+                        assertThat(response.username()).isEqualTo(validRequest.username());
+                        assertThat(response.birthdate()).isEqualTo(validRequest.birthdate());
+                        assertThat(response.countryOfResidence()).isEqualTo(validRequest.countryOfResidence());
+                        assertThat(response.phoneNumber()).isEqualTo(validRequest.phoneNumber());
+                        assertThat(response.gender()).isEqualTo(validRequest.gender());
+
+                        verify(userRepository).existsByUsernameAndBirthdateAndCountryOfResidence(any(), any(), any());
+                        verify(userRepository).existsByUsernameAndBirthdateAndCountryOfResidence(
+                                        "jean.jacques",
+                                        LocalDate.now().minusYears(25),
+                                        Country.FR);
+
+                        verify(eligibilityRuleService).verifyUserEligibility(any());
+
+                        verify(userRepository).save(any());
+                }
+
+                @Test
+                @DisplayName("should map request to entity and pass it to eligibility check")
+                void shouldPassMappedEntityToEligibilityService() {
+                        UserRequest validRequest = new UserRequest(
+                                        "martha.tack",
+                                        LocalDate.now().minusYears(27),
+                                        Country.DE,
+                                        "0778529684",
+                                        Gender.FEMALE);
+
+                        when(userRepository.existsByUsernameAndBirthdateAndCountryOfResidence(any(), any(),
+                                        any())).thenReturn(false);
+
+                        doNothing().when(eligibilityRuleService).verifyUserEligibility(any(User.class));
+
+                        when(userRepository.save(any(User.class))).thenReturn(generator.nextObject(User.class));
+
+                        userService.registerUser(validRequest);
+
+                        ArgumentCaptor<User> captor = ArgumentCaptor.forClass(User.class);
+
+                        verify(eligibilityRuleService).verifyUserEligibility(captor.capture());
+                        User captured = captor.getValue();
+
+                        assertThat(captured.getUsername()).isEqualTo(validRequest.username());
+                        assertThat(captured.getBirthdate()).isEqualTo(validRequest.birthdate());
+                        assertThat(captured.getCountryOfResidence()).isEqualTo(validRequest.countryOfResidence());
+                        assertThat(captured.getPhoneNumber()).isEqualTo(validRequest.phoneNumber());
+                        assertThat(captured.getGender()).isEqualTo(validRequest.gender());
+
+                        verify(userRepository).existsByUsernameAndBirthdateAndCountryOfResidence(any(), any(), any());
+                        verify(userRepository).existsByUsernameAndBirthdateAndCountryOfResidence(
+                                        "martha.tack",
+                                        LocalDate.now().minusYears(27),
+                                        Country.DE);
+
+                        verify(eligibilityRuleService).verifyUserEligibility(any());
+
+                        verify(userRepository).save(any());
+                }
+
+                @Test
+                @DisplayName("should pass the mapped entity to repository save")
+                void shouldPassMappedEntityToRepository() {
+                        UserRequest validRequest = new UserRequest(
+                                        "julien.bras",
+                                        LocalDate.now().minusYears(65),
+                                        Country.US,
+                                        "+54856995214",
+                                        Gender.NON_BINARY);
+
+                        when(userRepository.existsByUsernameAndBirthdateAndCountryOfResidence(any(), any(), any()))
+                                        .thenReturn(false);
+
+                        doNothing().when(eligibilityRuleService).verifyUserEligibility(any(User.class));
+
+                        User savedUser = generator.nextObject(User.class);
+                        when(userRepository.save(any(User.class))).thenReturn(savedUser);
+
+                        userService.registerUser(validRequest);
+
+                        ArgumentCaptor<User> captor = ArgumentCaptor.forClass(User.class);
+
+                        verify(userRepository).save(captor.capture());
+                        User captured = captor.getValue();
+
+                        assertThat(captured.getUsername()).isEqualTo(validRequest.username());
+                        assertThat(captured.getBirthdate()).isEqualTo(validRequest.birthdate());
+                        assertThat(captured.getCountryOfResidence()).isEqualTo(validRequest.countryOfResidence());
+                        assertThat(captured.getPhoneNumber()).isEqualTo(validRequest.phoneNumber());
+                        assertThat(captured.getGender()).isEqualTo(validRequest.gender());
+
+                        verify(userRepository).existsByUsernameAndBirthdateAndCountryOfResidence(any(), any(), any());
+                        verify(userRepository).existsByUsernameAndBirthdateAndCountryOfResidence(
+                                        "julien.bras",
+                                        LocalDate.now().minusYears(65),
+                                        Country.US);
+
+                        verify(eligibilityRuleService).verifyUserEligibility(any());
+
+                        verify(userRepository).save(any());
+                }
+        }
+
+        @Nested
+        @DisplayName("registerUser - duplicate user")
+        class DuplicateUser {
+                @Test
+                @DisplayName("should throw AlreadyExistsException when user already exists")
+                void shouldThrowWhenUserAlreadyExists() {
+                        UserRequest existingUser = new UserRequest(
+                                        "pierre.raoul",
+                                        LocalDate.of(2000, 02, 05),
+                                        Country.FR,
+                                        "+54858965214",
+                                        Gender.PREFER_TO_SELF_DESCRIBE);
+
+                        when(userRepository.existsByUsernameAndBirthdateAndCountryOfResidence(any(), any(), any()))
+                                        .thenReturn(true);
+
+                        assertThatThrownBy(() -> userService.registerUser(existingUser))
+                                        .isInstanceOf(AlreadyExistsException.class)
+                                        .hasMessage(
+                                                        "Object User with username, birthdate, country: 'pierre.raoul, 2000-02-05, France' already exists")
+                                        .extracting("errorCode.httpStatus")
+                                        .isEqualTo(HttpStatus.CONFLICT);
+
+                        verify(userRepository).existsByUsernameAndBirthdateAndCountryOfResidence(any(), any(), any());
+                        verify(userRepository).existsByUsernameAndBirthdateAndCountryOfResidence(
+                                        "pierre.raoul",
+                                        LocalDate.of(2000, 02, 05),
+                                        Country.FR);
+
+                        verify(eligibilityRuleService, never()).verifyUserEligibility(any());
+                        verify(userRepository, never()).save(any());
+                }
+        }
+
+        @Nested
+        @DisplayName("registerUser - eligibility failure")
+        class EligibilityFailure {
+                @Test
+                @DisplayName("should propagate UserNotEligibleException from eligibility service")
+                void shouldPropagateEligibilityException() {
+                        UserRequest ineligibleUser = new UserRequest(
+                                        "michel.bertrand",
+                                        LocalDate.now().minusYears(52),
+                                        Country.FR,
+                                        "0698745263",
+                                        Gender.MALE);
+
+                        when(userRepository.existsByUsernameAndBirthdateAndCountryOfResidence(any(), any(), any()))
+                                        .thenReturn(false);
+
+                        doThrow(new UserNotEligibleException("Age must be greater than or equal to 18"))
+                                        .when(eligibilityRuleService).verifyUserEligibility(any(User.class));
+
+                        assertThatThrownBy(() -> userService.registerUser(ineligibleUser))
+                                        .isInstanceOf(UserNotEligibleException.class)
+                                        .hasMessage("User is not eligible: Age must be greater than or equal to 18")
+                                        .extracting("errorCode.httpStatus")
+                                        .isEqualTo(HttpStatus.valueOf(422));
+
+                        verify(userRepository).existsByUsernameAndBirthdateAndCountryOfResidence(any(), any(), any());
+                        verify(userRepository).existsByUsernameAndBirthdateAndCountryOfResidence(
+                                        "michel.bertrand",
+                                        LocalDate.now().minusYears(52),
+                                        Country.FR);
+
+                        verify(eligibilityRuleService).verifyUserEligibility(any());
+
+                        verify(userRepository, never()).save(any());
+                }
+        }
+
+        @Nested
+        @DisplayName("findUsersByCriteria")
+        class FindUsersByCriteria {
+                @SuppressWarnings("unchecked")
+                @Test
+                @DisplayName("should return a page of UserResponse mapped from repository results")
+                void shouldReturnMappedPage() {
+                        Pageable pageable = PageRequest.of(0, 20);
+                        Map<String, Object> filters = Map.of("username", "isa");
+
+                        User user1 = generator.nextObject(User.class);
+                        User user2 = generator.nextObject(User.class);
+                        Page<User> userPage = new PageImpl<>(List.of(user1, user2), pageable, 2);
+
+                        when(userRepository.findAll(any(Specification.class), eq(pageable))).thenReturn(userPage);
+
+                        Page<UserResponse> result = userService.findUsersByCriteria(pageable, filters);
+
+                        assertThat(result.getContent()).hasSize(2);
+                        assertThat(result.getTotalElements()).isEqualTo(2);
+                        assertThat(result.getContent())
+                                        .extracting(UserResponse::username)
+                                        .containsExactly(user1.getUsername(), user2.getUsername());
+
+                        verify(userRepository).findAll(any(Specification.class), eq(pageable));
+                }
+
+                @SuppressWarnings("unchecked")
+                @Test
+                @DisplayName("should return an empty page when no users match")
+                void shouldReturnEmptyPage() {
+                        Pageable pageable = PageRequest.of(0, 20);
+                        Map<String, Object> filters = Map.of("username", "nonexistent");
+
+                        Page<User> emptyPage = new PageImpl<>(List.of(), pageable, 0);
+                        when(userRepository.findAll(any(Specification.class), eq(pageable))).thenReturn(emptyPage);
+
+                        Page<UserResponse> result = userService.findUsersByCriteria(pageable, filters);
+
+                        assertThat(result.getContent()).isEmpty();
+                        assertThat(result.getTotalElements()).isZero();
+
+                        verify(userRepository).findAll(any(Specification.class), eq(pageable));
+                }
+
+                @SuppressWarnings("unchecked")
+                @Test
+                @DisplayName("should pass the given pageable through to the repository unchanged")
+                void shouldPassPageableThrough() {
+                        Pageable pageable = PageRequest.of(2, 5, Sort.by("username").ascending());
+                        Map<String, Object> filters = Map.of();
+
+                        when(userRepository.findAll(any(Specification.class), any(Pageable.class)))
+                                        .thenReturn(Page.empty(pageable));
+
+                        userService.findUsersByCriteria(pageable, filters);
+
+                        ArgumentCaptor<Pageable> pageableCaptor = ArgumentCaptor.forClass(Pageable.class);
+                        verify(userRepository).findAll(any(Specification.class), pageableCaptor.capture());
+
+                        assertThat(pageableCaptor.getValue()).isEqualTo(pageable);
+
+                        verify(userRepository).findAll(any(Specification.class), eq(pageable));
+                }
+        }
+
+        @Nested
+        @DisplayName("findUserById")
+        class FindUserById {
+                @Test
+                @DisplayName("should return found user")
+                void shouldReturnFoundUser() {
+                        User userFound = generator.nextObject(User.class);
+
+                        when(userRepository.findById(any())).thenReturn(Optional.of(userFound));
+
+                        UserResponse userResponse = userService.findUserById(1L);
+
+                        assertThat(userResponse).isNotNull();
+                        assertThat(userResponse.id()).isEqualTo(userFound.getId());
+                        assertThat(userResponse.username()).isEqualTo(userFound.getUsername());
+                        assertThat(userResponse.birthdate()).isEqualTo(userFound.getBirthdate());
+                        assertThat(userResponse.countryOfResidence()).isEqualTo(userFound.getCountryOfResidence());
+                        assertThat(userResponse.phoneNumber()).isEqualTo(userFound.getPhoneNumber());
+                        assertThat(userResponse.gender()).isEqualTo(userFound.getGender());
+
+                        verify(userRepository).findById(any());
+                        verify(userRepository).findById(1L);
+                }
+
+                @Test
+                @DisplayName("should throw when user not found")
+                void shouldThrowWhenUserNotFound() {
+                        when(userRepository.findById(any())).thenReturn(Optional.empty());
+
+                        assertThatThrownBy(() -> userService.findUserById(1L))
+                                        .isInstanceOf(ObjectNotFoundException.class)
+                                        .hasMessage("Failed to find object of type User related to id: 1")
+                                        .extracting("errorCode.httpStatus")
+                                        .isEqualTo(HttpStatus.NOT_FOUND);
+
+                        verify(userRepository).findById(any());
+                        verify(userRepository).findById(1L);
+                }
+        }
+}

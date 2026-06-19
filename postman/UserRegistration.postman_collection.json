@@ -1,0 +1,1218 @@
+{
+  "info": {
+    "_postman_id": "e73c6189-59b3-4f21-9758-7737e9f77d14",
+    "name": "UserRegistration",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "55869077",
+    "_collection_link": "https://go.postman.co/collection/55869077-e73c6189-59b3-4f21-9758-7737e9f77d14?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Register User",
+      "item": [
+        {
+          "name": "Errors",
+          "item": [
+            {
+              "name": "Technical validation errors",
+              "item": [
+                {
+                  "name": "Username errors",
+                  "item": [
+                    {
+                      "name": "registerUser - 400 - null username",
+                      "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\r\n    \"birthdate\": \"1992-07-15\",\r\n    \"countryOfResidence\": \"FR\",\r\n    \"phoneNumber\": \"+33612345678\",\r\n    \"gender\": \"FEMALE\"\r\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "http://localhost:8080/api/users",
+                          "protocol": "http",
+                          "host": [
+                            "localhost"
+                          ],
+                          "port": "8080",
+                          "path": [
+                            "api",
+                            "users"
+                          ]
+                        }
+                      },
+                      "response": []
+                    },
+                    {
+                      "name": "registerUser - 400 - blank username",
+                      "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\r\n    \"username\": \"\",\r\n    \"birthdate\": \"1992-07-15\",\r\n    \"countryOfResidence\": \"FR\",\r\n    \"phoneNumber\": \"+33612345678\",\r\n    \"gender\": \"FEMALE\"\r\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "http://localhost:8080/api/users",
+                          "protocol": "http",
+                          "host": [
+                            "localhost"
+                          ],
+                          "port": "8080",
+                          "path": [
+                            "api",
+                            "users"
+                          ]
+                        }
+                      },
+                      "response": []
+                    },
+                    {
+                      "name": "registerUser - 400 - blank username too short",
+                      "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\r\n    \"username\": \"po\",\r\n    \"birthdate\": \"1992-07-15\",\r\n    \"countryOfResidence\": \"FR\",\r\n    \"phoneNumber\": \"+33612345678\",\r\n    \"gender\": \"FEMALE\"\r\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "http://localhost:8080/api/users",
+                          "protocol": "http",
+                          "host": [
+                            "localhost"
+                          ],
+                          "port": "8080",
+                          "path": [
+                            "api",
+                            "users"
+                          ]
+                        }
+                      },
+                      "response": []
+                    },
+                    {
+                      "name": "registerUser - 400 - blank username too long",
+                      "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\r\n    \"username\": \"xqzplmrtvnoa93hfydksewbgjtuqxpzlmvra8cnso4kjedtwhybfg\",\r\n    \"birthdate\": \"1992-07-15\",\r\n    \"countryOfResidence\": \"FR\",\r\n    \"phoneNumber\": \"+33612345678\",\r\n    \"gender\": \"FEMALE\"\r\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "http://localhost:8080/api/users",
+                          "protocol": "http",
+                          "host": [
+                            "localhost"
+                          ],
+                          "port": "8080",
+                          "path": [
+                            "api",
+                            "users"
+                          ]
+                        }
+                      },
+                      "response": []
+                    }
+                  ]
+                },
+                {
+                  "name": "Birthdate erros",
+                  "item": [
+                    {
+                      "name": "registerUser - 400 - null birthdate",
+                      "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\r\n    \"username\": \"isabelle.lamy\",\r\n    \"countryOfResidence\": \"FR\",\r\n    \"phoneNumber\": \"+33612345678\",\r\n    \"gender\": \"FEMALE\"\r\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "http://localhost:8080/api/users",
+                          "protocol": "http",
+                          "host": [
+                            "localhost"
+                          ],
+                          "port": "8080",
+                          "path": [
+                            "api",
+                            "users"
+                          ]
+                        }
+                      },
+                      "response": []
+                    },
+                    {
+                      "name": "registerUser - 400 - birthday in future",
+                      "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\r\n    \"username\": \"isabelle.lamy\",\r\n    \"birthdate\": \"2999-01-01\",\r\n    \"countryOfResidence\": \"FR\",\r\n    \"phoneNumber\": \"+33612345678\",\r\n    \"gender\": \"FEMALE\"\r\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "http://localhost:8080/api/users",
+                          "protocol": "http",
+                          "host": [
+                            "localhost"
+                          ],
+                          "port": "8080",
+                          "path": [
+                            "api",
+                            "users"
+                          ]
+                        }
+                      },
+                      "response": []
+                    }
+                  ]
+                },
+                {
+                  "name": "Country errors",
+                  "item": [
+                    {
+                      "name": "registerUser - 400 -  null country",
+                      "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\r\n    \"username\": \"isabelle.lamy\",\r\n    \"birthdate\": \"1992-07-15\",\r\n    \"phoneNumber\": \"+33612345678\",\r\n    \"gender\": \"FEMALE\"\r\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "http://localhost:8080/api/users",
+                          "protocol": "http",
+                          "host": [
+                            "localhost"
+                          ],
+                          "port": "8080",
+                          "path": [
+                            "api",
+                            "users"
+                          ]
+                        }
+                      },
+                      "response": []
+                    },
+                    {
+                      "name": "registerUser - 400 - invalid country",
+                      "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\r\n    \"username\": \"isabelle.lamy\",\r\n    \"birthdate\": \"1992-07-15\",\r\n    \"countryOfResidence\": \"INVALID\",\r\n    \"phoneNumber\": \"+33612345678\",\r\n    \"gender\": \"FEMALE\"\r\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "http://localhost:8080/api/users",
+                          "protocol": "http",
+                          "host": [
+                            "localhost"
+                          ],
+                          "port": "8080",
+                          "path": [
+                            "api",
+                            "users"
+                          ]
+                        }
+                      },
+                      "response": []
+                    }
+                  ]
+                },
+                {
+                  "name": "Phone number errors",
+                  "item": [
+                    {
+                      "name": "registerUser - 400 - phone number too long",
+                      "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\r\n    \"username\": \"isabelle.lamy\",\r\n    \"birthdate\": \"1992-07-15\",\r\n    \"countryOfResidence\": \"FR\",\r\n    \"phoneNumber\": \"+33612345678641582515\",\r\n    \"gender\": \"FEMALE\"\r\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "http://localhost:8080/api/users",
+                          "protocol": "http",
+                          "host": [
+                            "localhost"
+                          ],
+                          "port": "8080",
+                          "path": [
+                            "api",
+                            "users"
+                          ]
+                        }
+                      },
+                      "response": []
+                    },
+                    {
+                      "name": "registerUser - 400 - phone number invalid char",
+                      "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\r\n    \"username\": \"isabelle.lamy\",\r\n    \"birthdate\": \"1992-07-15\",\r\n    \"countryOfResidence\": \"FR\",\r\n    \"phoneNumber\": \"fezf547\",\r\n    \"gender\": \"FEMALE\"\r\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "http://localhost:8080/api/users",
+                          "protocol": "http",
+                          "host": [
+                            "localhost"
+                          ],
+                          "port": "8080",
+                          "path": [
+                            "api",
+                            "users"
+                          ]
+                        }
+                      },
+                      "response": []
+                    }
+                  ]
+                },
+                {
+                  "name": "Gender errors",
+                  "item": [
+                    {
+                      "name": "registerUser - 400 - invalid gender",
+                      "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\r\n    \"username\": \"isabelle.lamy\",\r\n    \"birthdate\": \"1992-07-15\",\r\n    \"countryOfResidence\": \"FR\",\r\n    \"phoneNumber\": \"+33612345678\",\r\n    \"gender\": \"INVALID\"\r\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "http://localhost:8080/api/users",
+                          "protocol": "http",
+                          "host": [
+                            "localhost"
+                          ],
+                          "port": "8080",
+                          "path": [
+                            "api",
+                            "users"
+                          ]
+                        }
+                      },
+                      "response": []
+                    }
+                  ]
+                },
+                {
+                  "name": "registerUser - 400 - multiple validation errors",
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"birthdate\": \"1992-07-15\",\r\n    \"phoneNumber\": \"+3361234567741747243741718\",\r\n    \"gender\": \"FEMALE\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/api/users",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "api",
+                        "users"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "Business validation errors",
+              "item": [
+                {
+                  "name": "registerUser - 409 - user already exists",
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"username\": \"alice.legrand\",\r\n    \"birthdate\": \"1990-05-12\",\r\n    \"countryOfResidence\": \"FR\",\r\n    \"phoneNumber\": \"+33612345678\",\r\n    \"gender\": \"FEMALE\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/api/users",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "api",
+                        "users"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "registerUser - 422 - user not french",
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"username\": \"isabelle.lamy\",\r\n    \"birthdate\": \"1992-07-15\",\r\n    \"countryOfResidence\": \"DE\",\r\n    \"phoneNumber\": \"+33612345678\",\r\n    \"gender\": \"FEMALE\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/api/users",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "api",
+                        "users"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "registerUser - 422 - user not adult",
+                  "event": [
+                    {
+                      "listen": "prerequest",
+                      "script": {
+                        "exec": [
+                          "const today = new Date();\r",
+                          "\r",
+                          "today.setFullYear(today.getFullYear() - 15);\r",
+                          "\r",
+                          "const birthDate = today.toISOString().split('T')[0];\r",
+                          "\r",
+                          "pm.environment.set(\"birthDate\", birthDate);"
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"username\": \"isabelle.lamy\",\r\n    \"birthdate\": \"{{birthDate}}\",\r\n    \"countryOfResidence\": \"FR\",\r\n    \"phoneNumber\": \"+33612345678\",\r\n    \"gender\": \"FEMALE\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/api/users",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "api",
+                        "users"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "registerUser - 400 - malformed Json",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"username\": \"isabelle.lamy\",\r\n    \"birthdate\": \"1992-07-15\",\r\n    \"countryOfResidence\": \"FR\",\r\n    \"phoneNumber\": \"+33612345678\",\r\n    \"gender\": \"FEMALE\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/users",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "No errors",
+          "item": [
+            {
+              "name": "registerUser - 201",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"username\": \"isabelle.lamy\",\r\n    \"birthdate\": \"1992-07-15\",\r\n    \"countryOfResidence\": \"FR\",\r\n    \"phoneNumber\": \"+33612345678\",\r\n    \"gender\": \"FEMALE\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/users",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "registerUser - 201 - null phone number",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"username\": \"pauline.clous\",\r\n    \"birthdate\": \"1999-08-16\",\r\n    \"countryOfResidence\": \"FR\",\r\n    \"gender\": \"FEMALE\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/users",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "registerUser - 201 - null gender",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"username\": \"pascal.chappes\",\r\n    \"birthdate\": \"1987-01-15\",\r\n    \"countryOfResidence\": \"FR\",\r\n    \"phoneNumber\": \"+33612345678\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/users",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "registerUser - 201 - username exactly 3 chars",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"username\": \"isa\",\r\n    \"birthdate\": \"1992-07-15\",\r\n    \"countryOfResidence\": \"FR\",\r\n    \"phoneNumber\": \"+33612345678\",\r\n    \"gender\": \"FEMALE\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/users",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "registerUser - 201 - username exactly 50 chars",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"username\": \"qzmxnrvptlekajshdgwfycobui4937xntvpsldkqemahjgr\",\r\n    \"birthdate\": \"1992-07-15\",\r\n    \"countryOfResidence\": \"FR\",\r\n    \"phoneNumber\": \"+33612345678\",\r\n    \"gender\": \"FEMALE\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/users",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "registerUser - 201 - same username and country",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"username\": \"isabelle.lamy\",\r\n    \"birthdate\": \"1991-07-15\",\r\n    \"countryOfResidence\": \"FR\",\r\n    \"phoneNumber\": \"+33612345678\",\r\n    \"gender\": \"FEMALE\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/users",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Get Users",
+      "item": [
+        {
+          "name": "No errors",
+          "item": [
+            {
+              "name": "getUserByCriteria - 200 - page 0-10",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/users?page=0&size=10",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0",
+                      "type": "text"
+                    },
+                    {
+                      "key": "size",
+                      "value": "10",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "getUserByCriteria - 200 - page 1-15",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/users?page=1&size=15",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "size",
+                      "value": "15"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "getUserByCriteria - 200 - filter id",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/users?page=0&size=5&id=21",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "5"
+                    },
+                    {
+                      "key": "id",
+                      "value": "21"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "getUserByCriteria - 200 - filter username",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/users?page=0&size=5&username=be",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "5"
+                    },
+                    {
+                      "key": "username",
+                      "value": "be"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "getUserByCriteria - 200 - filter username ignore case",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/users?page=0&size=5&username=MA",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "5"
+                    },
+                    {
+                      "key": "username",
+                      "value": "MA"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "getUserByCriteria - 200 - filter username + page 1",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/users?page=1&size=5&username=be",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "size",
+                      "value": "5"
+                    },
+                    {
+                      "key": "username",
+                      "value": "be"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "getUserByCriteria - 200 - filter birthdate",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/users?page=0&size=10&birthdate=1993-06-30",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "birthdate",
+                      "value": "1993-06-30"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "getUserByCriteria - 200 - filter gender full",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/users?page=0&size=10&gender=FEMALE",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "gender",
+                      "value": "FEMALE"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "getUserByCriteria - 200 - filter gender like",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/users?page=0&size=10&gender=REF",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "gender",
+                      "value": "REF"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "getUserByCriteria - 200 - filter gender ignore case",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/users?page=0&size=10&gender=say",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "gender",
+                      "value": "say"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "getUserByCriteria - 200 - multiple filter",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/users?page=0&size=10&username=be&gender=FEMALE",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "username",
+                      "value": "be"
+                    },
+                    {
+                      "key": "gender",
+                      "value": "FEMALE",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Errors",
+          "item": [
+            {
+              "name": "getUserByCriteria - 500 - filter invalid date",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/users?page=0&size=10&birthdate=not a date",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "birthdate",
+                      "value": "not a date"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Get User by id",
+      "item": [
+        {
+          "name": "No Errors",
+          "item": [
+            {
+              "name": "findByUserId - 200 - user found",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/users/25",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users",
+                    "25"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Errors",
+          "item": [
+            {
+              "name": "findByUserId - 404- user not found",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/users/9685",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users",
+                    "9685"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "findByUserId - 500 - id not numeric",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/users/na",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users",
+                    "na"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

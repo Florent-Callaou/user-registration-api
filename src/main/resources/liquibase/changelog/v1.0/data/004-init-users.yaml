@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-init-users-202606171130
+      author: florent.callaou
+      changes:
+        - loadData:
+            file: liquibase/changelog/v1.0/test-datas/users.csv
+            tableName: users
+            separator: ";"
+            encoding: UTF-8
+            usePreparedStatements: true
