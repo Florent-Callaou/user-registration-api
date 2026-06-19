@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import callaou.userregistration.exceptions.AlreadyExistsException;
 import callaou.userregistration.exceptions.ObjectNotFoundException;
-import callaou.userregistration.exceptions.ObjectNotFoundException;
 import callaou.userregistration.exceptions.UserNotEligibleException;
 import callaou.userregistration.exceptions.enumerations.ErrorCode;
 import callaou.userregistration.logging.Loggable;
