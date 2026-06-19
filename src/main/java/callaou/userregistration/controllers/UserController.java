@@ -1,10 +1,17 @@
 package callaou.userregistration.controllers;
 
+import java.util.Map;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import callaou.userregistration.model.dtos.UserRequest;
@@ -44,5 +51,26 @@ public class UserController {
         UserResponse response = userService.registerUser(userRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    /**
+     * Get a page of users given filters
+     * 
+     * @param pageable the pageblae informations
+     * @param filters  the filters
+     * @return the page of users found
+     */
+    @GetMapping
+    public ResponseEntity<Page<UserResponse>> getUsersByCriteria(
+            @PageableDefault(sort = "username") Pageable pageable,
+            @RequestParam Map<String, Object> filters) {
+        filters.remove("page");
+        filters.remove("size");
+        filters.remove("sort");
+        filters.remove("date");
+
+        Page<UserResponse> pageResponse = userService.findUsersByCriteria(pageable, filters);
+
+        return ResponseEntity.ok().body(pageResponse);
     }
 }

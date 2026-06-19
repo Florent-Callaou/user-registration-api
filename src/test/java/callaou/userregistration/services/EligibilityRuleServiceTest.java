@@ -372,7 +372,7 @@ class EligibilityRuleServiceTest {
 
                 @ParameterizedTest(name = "{0}")
                 @MethodSource("lteCases")
-                @DisplayName("LTE — age less than or equal to 65")
+                @DisplayName("LTE - age less than or equal to 65")
                 void lte(String description, LocalDate birthdate, String expectedMessage) {
                         User user = buildUser(Country.FR, birthdate);
 
@@ -502,7 +502,7 @@ class EligibilityRuleServiceTest {
 
                 @ParameterizedTest(name = "{0}")
                 @MethodSource("betweenPassCases")
-                @DisplayName("BETWEEN — should pass for ages within range [18,65] inclusive")
+                @DisplayName("BETWEEN - should pass for ages within range [18,65] inclusive")
                 void betweenPass(String description, LocalDate birthdate) {
                         User eligibileUser = buildUser(Country.FR, birthdate);
 

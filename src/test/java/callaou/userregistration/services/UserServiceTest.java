@@ -3,6 +3,7 @@ package callaou.userregistration.services;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
@@ -10,6 +11,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
 
 import org.jeasy.random.EasyRandom;
 import org.junit.jupiter.api.DisplayName;
@@ -21,6 +24,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 
 import callaou.userregistration.exceptions.AlreadyExistsException;
@@ -69,7 +78,7 @@ class UserServiceTest {
         private final EasyRandom generator = new EasyRandom();
 
         @Nested
-        @DisplayName("registerUser — no errors")
+        @DisplayName("registerUser - no errors")
         class NoErrors {
                 @Test
                 @DisplayName("should return UserResponse when user is new and eligible")
@@ -200,7 +209,7 @@ class UserServiceTest {
         }
 
         @Nested
-        @DisplayName("registerUser — duplicate user")
+        @DisplayName("registerUser - duplicate user")
         class DuplicateUser {
                 @Test
                 @DisplayName("should throw AlreadyExistsException when user already exists")
@@ -234,7 +243,7 @@ class UserServiceTest {
         }
 
         @Nested
-        @DisplayName("registerUser — eligibility failure")
+        @DisplayName("registerUser - eligibility failure")
         class EligibilityFailure {
                 @Test
                 @DisplayName("should propagate UserNotEligibleException from eligibility service")
@@ -270,4 +279,69 @@ class UserServiceTest {
                 }
         }
 
+        @Nested
+        @DisplayName("findUsersByCriteria")
+        class FindUsersByCriteria {
+                @SuppressWarnings("unchecked")
+                @Test
+                @DisplayName("should return a page of UserResponse mapped from repository results")
+                void shouldReturnMappedPage() {
+                        Pageable pageable = PageRequest.of(0, 20);
+                        Map<String, Object> filters = Map.of("username", "isa");
+
+                        User user1 = generator.nextObject(User.class);
+                        User user2 = generator.nextObject(User.class);
+                        Page<User> userPage = new PageImpl<>(List.of(user1, user2), pageable, 2);
+
+                        when(userRepository.findAll(any(Specification.class), eq(pageable))).thenReturn(userPage);
+
+                        Page<UserResponse> result = userService.findUsersByCriteria(pageable, filters);
+
+                        assertThat(result.getContent()).hasSize(2);
+                        assertThat(result.getTotalElements()).isEqualTo(2);
+                        assertThat(result.getContent())
+                                        .extracting(UserResponse::username)
+                                        .containsExactly(user1.getUsername(), user2.getUsername());
+
+                        verify(userRepository).findAll(any(Specification.class), eq(pageable));
+                }
+
+                @SuppressWarnings("unchecked")
+                @Test
+                @DisplayName("should return an empty page when no users match")
+                void shouldReturnEmptyPage() {
+                        Pageable pageable = PageRequest.of(0, 20);
+                        Map<String, Object> filters = Map.of("username", "nonexistent");
+
+                        Page<User> emptyPage = new PageImpl<>(List.of(), pageable, 0);
+                        when(userRepository.findAll(any(Specification.class), eq(pageable))).thenReturn(emptyPage);
+
+                        Page<UserResponse> result = userService.findUsersByCriteria(pageable, filters);
+
+                        assertThat(result.getContent()).isEmpty();
+                        assertThat(result.getTotalElements()).isZero();
+
+                        verify(userRepository).findAll(any(Specification.class), eq(pageable));
+                }
+
+                @SuppressWarnings("unchecked")
+                @Test
+                @DisplayName("should pass the given pageable through to the repository unchanged")
+                void shouldPassPageableThrough() {
+                        Pageable pageable = PageRequest.of(2, 5, Sort.by("username").ascending());
+                        Map<String, Object> filters = Map.of();
+
+                        when(userRepository.findAll(any(Specification.class), any(Pageable.class)))
+                                        .thenReturn(Page.empty(pageable));
+
+                        userService.findUsersByCriteria(pageable, filters);
+
+                        ArgumentCaptor<Pageable> pageableCaptor = ArgumentCaptor.forClass(Pageable.class);
+                        verify(userRepository).findAll(any(Specification.class), pageableCaptor.capture());
+
+                        assertThat(pageableCaptor.getValue()).isEqualTo(pageable);
+
+                        verify(userRepository).findAll(any(Specification.class), eq(pageable));
+                }
+        }
 }

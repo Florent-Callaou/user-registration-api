@@ -1,7 +1,10 @@
 package callaou.userregistration.services;
 
 import java.time.LocalDate;
+import java.util.Map;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import callaou.userregistration.exceptions.AlreadyExistsException;
@@ -11,6 +14,7 @@ import callaou.userregistration.model.dtos.UserResponse;
 import callaou.userregistration.model.entities.User;
 import callaou.userregistration.model.enumerations.Country;
 import callaou.userregistration.repositories.UserRepository;
+import callaou.userregistration.specifications.GenericSpecification;
 
 /**
  * Business logic for user registration and retrieval
@@ -70,6 +74,19 @@ public class UserService {
         User userSaved = userRepository.save(user);
 
         return userMapper.toResponse(userSaved);
+    }
+
+    /**
+     * Find users given filters
+     * 
+     * @param pageable the pageable informations
+     * @param filters  the filters
+     * @return a page of users found
+     */
+    public Page<UserResponse> findUsersByCriteria(Pageable pageable, Map<String, Object> filters) {
+        GenericSpecification<User> specification = new GenericSpecification<>(filters);
+
+        return userRepository.findAll(specification, pageable).map(userMapper::toResponse);
     }
 
 }
