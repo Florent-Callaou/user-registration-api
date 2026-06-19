@@ -38,7 +38,7 @@ A user registration REST API built with Spring Boot 4 and Java 25. The service v
 
 ### Clone repository 
 - Clone the repository into a folder:
-- 
+
 HTTPS :
 ```bash
 git clone https://github.com/Florent-Callaou/user-registration-api.git
