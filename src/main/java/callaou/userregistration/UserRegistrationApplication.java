@@ -2,11 +2,12 @@ package callaou.userregistration;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.security.autoconfigure.UserDetailsServiceAutoConfiguration;
 
 /**
  * The main class for the User Registration application.
  */
-@SpringBootApplication
+@SpringBootApplication(exclude = UserDetailsServiceAutoConfiguration.class)
 public class UserRegistrationApplication {
 
     /**
