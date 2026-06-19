@@ -70,7 +70,6 @@ public class UserController {
         filters.remove("page");
         filters.remove("size");
         filters.remove("sort");
-        filters.remove("date");
 
         Page<UserResponse> pageResponse = userService.findUsersByCriteria(pageable, filters);
 
